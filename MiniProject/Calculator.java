@@ -37,26 +37,26 @@ class Calculator extends Frame
 		
 		//....ÆÐ³Î
 		whole.setLayout(new GridLayout(7,1,5,5));
-		p1.setLayout(new GridLayout(1,1,0,0));
+		p1.setLayout(new GridLayout(1,1,5,5));
 		p1.add(dispL);
-		p2.setLayout(new GridLayout(1,1,0,0));
+		p2.setLayout(new GridLayout(1,1,5,5));
 		p2.add(inputL);
-		p3.setLayout(new GridLayout(1,2,5,0));
+		p3.setLayout(new GridLayout(1,2));
 		p3.add(button[16]);
 		p3.add(button[17]);
-		p4.setLayout(new GridLayout(1,4,5,0));
+		p4.setLayout(new GridLayout(1,4));
 		for(int i=0;i<4;i++) {
 			p4.add(button[i]);
 		}
-		p5.setLayout(new GridLayout(1,4,5,0));
+		p5.setLayout(new GridLayout(1,4));
 		for(int i=4;i<8;i++) {
 			p5.add(button[i]);
 		}
-		p6.setLayout(new GridLayout(1,4,5,0));
+		p6.setLayout(new GridLayout(1,4));
 		for(int i=8;i<12;i++) {
 			p6.add(button[i]);
 		}
-		p7.setLayout(new GridLayout(1,4,5,0));
+		p7.setLayout(new GridLayout(1,4));
 		for(int i=12;i<16;i++) {
 			p7.add(button[i]);
 		}
