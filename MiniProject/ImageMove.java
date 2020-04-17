@@ -1,27 +1,29 @@
 import java.awt.*;
+import javax.swing.*;
 import java.awt.event.*;
 class ImageMove extends Frame implements ActionListener, KeyListener, WindowListener
 {
 	//...사용자의 마우스 좌표
 	private int x=100;
 	private int y=100; 
-	private Button newBtn, leftBtn, rightBtn, topBtn, bottomBtn;
+	private JButton newBtn, leftBtn, rightBtn, topBtn, bottomBtn;
 	
 	public void init(){
 		//버튼 5개 생성
-		newBtn = new Button("New");
-		leftBtn = new Button("Left");
-		rightBtn = new Button("Right");
-		topBtn = new Button("Top");
-		bottomBtn = new Button("Bottom");
-
+		newBtn = new JButton("New");
+		leftBtn = new JButton("Left");
+		rightBtn = new JButton("Right");
+		topBtn = new JButton("Top");
+		bottomBtn = new JButton("Bottom");
+		
 		//...패널에 버튼 넣기
-		Panel p = new Panel();
+		Panel p = new Panel(new GridLayout(1,5,5,5));
 		p.add(newBtn); p.add(leftBtn); p.add(rightBtn);p.add(topBtn);p.add(bottomBtn);
 		add("North", p);
 
 		//윈도우 창 설정
 		setBounds(900,100,500,500);
+		setBackground(new Color(149,213,247));
 		setVisible(true);
 		setResizable(false);
 
@@ -38,7 +40,7 @@ class ImageMove extends Frame implements ActionListener, KeyListener, WindowList
 	//...paint메소드
 	public void paint(Graphics g){
 		Toolkit t = Toolkit.getDefaultToolkit();
-		Image image = t.getImage("airplane.jpg");
+		Image image = t.getImage("airplane.png");
 		g.drawImage(image, x,y,this);
 	}
 
