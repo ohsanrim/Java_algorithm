@@ -4,8 +4,8 @@ import java.awt.event.*;
 class ImageMove extends Frame implements ActionListener, KeyListener, WindowListener
 {
 	//...사용자의 마우스 좌표
-	private int x=100;
-	private int y=100; 
+	private int x=200;
+	private int y=200; 
 	private JButton newBtn, leftBtn, rightBtn, topBtn, bottomBtn;
 	
 	public void init(){
@@ -23,7 +23,6 @@ class ImageMove extends Frame implements ActionListener, KeyListener, WindowList
 
 		//윈도우 창 설정
 		setBounds(900,100,500,500);
-		setBackground(new Color(149,213,247));
 		setVisible(true);
 		setResizable(false);
 
@@ -41,6 +40,8 @@ class ImageMove extends Frame implements ActionListener, KeyListener, WindowList
 	public void paint(Graphics g){
 		Toolkit t = Toolkit.getDefaultToolkit();
 		Image image = t.getImage("airplane.png");
+		Image image2 = t.getImage("sky.jpg");
+		g.drawImage(image2,0,0,null);
 		g.drawImage(image, x,y,this);
 	}
 
@@ -66,7 +67,7 @@ class ImageMove extends Frame implements ActionListener, KeyListener, WindowList
 	
 	//...ActionListner의 추상메소드
 	public void actionPerformed(ActionEvent e){
-		if(e.getActionCommand()=="New"){ x=100; y=100; } 
+		if(e.getActionCommand()=="New"){ x=200; y=200; } 
 		else if(e.getActionCommand()=="Left"){
 			if(x<-50){ x=520;} 
 			else { x-=10; }
