@@ -5,16 +5,19 @@ import java.text.DecimalFormat;
 class Calculator extends Frame implements WindowListener, ActionListener
 {	
 	private Label dispL, inputL;
-	private JButton[] button;  //18°³
+	private JButton[] button;  //18ê°œ
 	StringBuffer sb= new StringBuffer();
-	DecimalFormat df= new DecimalFormat("#,##0.###############");  //¼Ò¼ıÁ¡ ÀÌÇÏ 15ÀÚ¸®±îÁö Ç¥Çö
-	
+	DecimalFormat df= new DecimalFormat("#,##0");  //ì†Œìˆ«ì  ì´í•˜ 15ìë¦¬ê¹Œì§€ í‘œí˜„
+	private String disp;   //ì¤‘ê°„ ê²°ê³¼ê°’
+	private int op;   //ì—°ì‚°ìê°€ ë“¤ì–´ê°€ëŠ” int
+	public double result;  //ë§¨ ì²˜ìŒ ê°’
 	public double number;
+	boolean opClick=false;
 
 	public Calculator(){
-		super("¹Ì´Ï °è»ê±â");
+		super("ë¯¸ë‹ˆ ê³„ì‚°ê¸°");
 
-		Panel whole = new Panel();  //ÀüÃ¼
+		Panel whole = new Panel();  //ì „ì²´
 	    Panel p1 = new Panel();  
 	    Panel p2 = new Panel();  
 		Panel p3 = new Panel(); 
@@ -23,20 +26,20 @@ class Calculator extends Frame implements WindowListener, ActionListener
 		Panel p6 = new Panel();
 		Panel p7 = new Panel();
 		
-		//.....¹öÆ°
+		//.....ë²„íŠ¼
 		String[] buttonName = {"7","8","9","/","4","5","6","*","1","2","3","-",".","0","=","+","Back","C"};
 		button = new JButton[18];
 		for(int i=0;i<18;i++){
 			 button[i]=new JButton(buttonName[i]);
 		}
 		
-		//....¶óº§
+		//....ë¼ë²¨
 		dispL= new Label("0",Label.RIGHT);
 		dispL.setBackground(new Color(139,158,226));
 		inputL= new Label("0", Label.RIGHT);
 		inputL.setBackground(new Color(139,158,226));
 		
-		//....ÆĞ³Î
+		//....íŒ¨ë„
 		whole.setLayout(new GridLayout(7,1,5,5));
 		p1.setLayout(new GridLayout(1,1,5,5));
 		p1.add(dispL);
@@ -53,6 +56,8 @@ class Calculator extends Frame implements WindowListener, ActionListener
 		for(int i=8;i<12;i++) { p6.add(button[i]); }
 		p7.setLayout(new GridLayout(1,4));
 		for(int i=12;i<16;i++) { p7.add(button[i]);	}
+
+		//...ì „ì²´ íŒ¨ë„ì— ì—¬ëŸ¬ ê°œì˜ íŒ¨ë„ ë‹´ê¸°
 		whole.add(p1);
 		whole.add(p2);
 		whole.add(p3);
@@ -61,17 +66,27 @@ class Calculator extends Frame implements WindowListener, ActionListener
 		whole.add(p6);
 		whole.add(p7);
 		add("Center", whole);
-		//...À©µµ¿ì Ã¢ ¼³Á¤
+
+		//...ìœˆë„ìš° ì°½ ì„¤ì •
 		setBounds(900,180,350,500);
 		setBackground(new Color(105,132,224));
 		setVisible(true);
-		//...ÀÌº¥Æ® ¼³Á¤
+		//...ì´ë²¤íŠ¸ ì„¤ì •
 		for(int i=0;i<18;i++){ button[i].addActionListener(this); }
 		this.addWindowListener(this);
 	}
 
-		//...actionPerFormed ÀÌº¥Æ®
+		//...actionPerFormed ì´ë²¤íŠ¸
 		public void actionPerformed(ActionEvent e){
+			//ì „ì— ì…ë ¥í–ˆë˜ ì—°ì‚°ìê°€ =ì´ì—ˆì„ ë•Œ(ê³„ì‚°ì´ í•œë²ˆ ì¢…ë£Œëœ í›„, ê·¸ ê°’ì— ë‹¤ì‹œ ê³„ì‚°ì„ í•™[ ë§Œë“¤ê¸° ìœ„í•œ ì´ˆê¸°ì‘ì—…)
+			if(op==61){  
+				sb.delete(0,sb.length());
+				sb.append(result);
+				disp="";
+				op=0;
+				dispL.setText(disp);
+			}
+			//ìˆ«ìë²„íŠ¼ì„ ëˆŒë €ì„ ì‹œ 
 			if(e.getActionCommand()=="1"){ sb.append(1); } 
 			else if(e.getActionCommand()=="2"){ sb.append(2); }
 			else if(e.getActionCommand()=="3"){ sb.append(3); }
@@ -82,7 +97,13 @@ class Calculator extends Frame implements WindowListener, ActionListener
 			else if(e.getActionCommand()=="8"){ sb.append(8); }
 			else if(e.getActionCommand()=="9"){ sb.append(9); }
 			else if(e.getActionCommand()=="0"){ sb.append(0); }
-			else if(e.getActionCommand()=="C"){ sb.delete(0,sb.length()); }
+			else if(e.getActionCommand()=="C"){ 
+				sb.delete(0,sb.length()); 
+				dispL.setText("0"); 
+				disp=""; 
+				result=0;
+				op=0;
+				}
 			else if(e.getActionCommand()=="Back"){ 
 				if(sb.length()>0) sb=sb.delete(sb.length()-1,sb.length());
 				else sb.delete(0,sb.length());
@@ -95,29 +116,79 @@ class Calculator extends Frame implements WindowListener, ActionListener
 						sb.append(".");
 					}
 				} 
+			} else { 
+				//ì—°ì‚°ì ë²„íŠ¼ì„ í´ë¦­í•˜ëŠ” ëª¨ë“  ê²½ìš°(+,-,*,/) 
+				opClick=true;
+				//dispì•ˆì˜ ê°’ì´ nullì¸ì§€ ì•„ë‹Œì§€ í™•ì¸
+				if(disp!=null) disp+=sb.toString();
+				else disp=sb.toString();
+				//opì•ˆì— ì—°ì‚°ìì˜ ê°’ì´ ìˆëŠ”ì§€ í™•ì¸(ì´ˆê¸°ê°’ í™•ì¸ìš©);
+				if(op==0){
+					result=Double.parseDouble(sb.toString());
+					//ì—°ì‚°ìë¥¼ 10ì§„ìˆ˜ë¡œ ë³€í™˜
+					op=e.getActionCommand().hashCode();
+					disp+=e.getActionCommand();
+					dispL.setText(disp);
+				} else {
+					disp+=e.getActionCommand();
+					if(op==43){  //"+"
+						result+=Double.parseDouble(sb.toString());
+						dispL.setText(disp);
+						} 
+					else if(op==45){   //"-"
+						result-=Double.parseDouble(sb.toString());
+						dispL.setText(disp);
+						} 
+					else if(op==42){  //"*"
+						result*=Double.parseDouble(sb.toString());
+						dispL.setText(disp);
+						} 
+					else if(op==47){   //"/"
+						result/=Double.parseDouble(sb.toString());
+						dispL.setText(disp);
+					} 
+					op=e.getActionCommand().hashCode();
+				}
+				sb.delete(0,sb.length());
 			}
-			//...StringBufferÀÇ °ªÀ» ÀÓ½Ã·Î ´ãÀ» temp º¯¼ö
+			//...inputLì— í‘œì‹œí•˜ê¸° ìœ„í•œ ì„¤ì •
 			String temp;
-			//...StringBufferd ¾È¿¡ ÀÖ´Â °ªÀÌ Á¸ÀçÇÏ´ÂÁö ¿©ºÎ¸¦ Ã¼Å©
+			String temp2;
 			if(sb.length()>0){
-				//StringBuffer ¾È¿¡ ¼Ò¼öÁ¡ÀÌ ÀÖÀ» ‹š(¼Ò¼öÁ¡À» ±âÁØÀ¸·Î ¾ÕÀÇ Á¤¼öºÎºĞÀ» decimalFormatÁøÇà)
-				if(sb.indexOf(".")==sb.length()-1){
-					temp=sb.substring(0,sb.indexOf("."));
-					temp=df.format(Integer.parseInt(temp));
-					temp+=".";
-					inputL.setText(temp);
+				//Stringbufferì— ì†Œìˆ˜ì ì´ ìˆëŠ” ê²½ìš°
+				if(sb.indexOf(".")!=-1){
+					if(sb.indexOf(".")==sb.length()-1){
+						//StringBufferì— ì…ë ¥ëœ ë§¨ ë ê°’ì´ ì†Œìˆ˜ì ì¼ ê²½ìš°(ì—ëŸ¬ ë°©ì§€ìš©)
+						temp=sb.substring(0,sb.indexOf("."));
+						temp=df.format(Integer.parseInt(temp));
+						temp+=".";
+						inputL.setText(temp);
+					} else {
+						//ì†Œìˆ˜ì ì„ ê¸°ì¤€ìœ¼ë¡œ ì •ìˆ˜ë¶€ë¶„ì€tempì—, ì†Œìˆ˜ë¶€ë¶„ì€ temp2ì— ì €ì¥ í›„ í•©ì¹¨
+						temp=sb.substring(0,sb.indexOf("."));
+						temp2=sb.substring(sb.indexOf(".")+1, sb.length());
+						temp=df.format(Integer.parseInt(temp));
+						temp+=".";
+						temp+=temp2;
+						inputL.setText(temp);
+					}
 				} else {
 					temp=sb.toString();
-					temp=df.format(Double.parseDouble(temp));
+					temp=df.format(Integer.parseInt((temp)));
 					inputL.setText(temp);
 				}
 			} else inputL.setText("0");
+			//...ì—°ì‚°ìê°€ í´ë¦­ë˜ì—ˆì„ ë•Œ, inputLì— ê³„ì‚°í•œ resultê°’ì´ ë³´ì´ê²Œ ì„¤ì •/ "="ë²„íŠ¼ì„ í´ë¦­í•˜ì˜€ì„ ì‹œ ìµœì¢… ê²°ê³¼ê°’ í‘œì‹œ
+			if(opClick==true||op==61){
+					inputL.setText(Double.toString(result));
+					opClick=false;
+			}
 		}
 
-		//...windowListenerÀÇ Ãß»ó¸Ş¼Òµå
+		//...windowListenerì˜ ì¶”ìƒë©”ì†Œë“œ
 		public void windowActivated(WindowEvent e){}
-		public void windowClosed(WindowEvent e){} //Ã¢À» ´İÀº µÚ »çÈÄÃ³¸®
-		public void windowClosing(WindowEvent e){ System.exit(0); }  //x¸¦ ´©¸£´Â ½ÃÁ¤
+		public void windowClosed(WindowEvent e){} //ì°½ì„ ë‹«ì€ ë’¤ ì‚¬í›„ì²˜ë¦¬
+		public void windowClosing(WindowEvent e){ System.exit(0); }  //xë¥¼ ëˆ„ë¥´ëŠ” ì‹œì •
 		public void windowDeactivated(WindowEvent e){}
 		public void windowDeiconified(WindowEvent e){}
 		public void windowIconified(WindowEvent e){}
@@ -126,6 +197,5 @@ class Calculator extends Frame implements WindowListener, ActionListener
 	public static void main(String[] args) 
 	{
 		Calculator c = new Calculator();
-		
 	}
 }
