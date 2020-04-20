@@ -9,9 +9,9 @@ public class Beak_3009 {  //네번째 점
 	public static void main(String[] args) {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
-        int twoX=0;
-        int twoY=0;
-        int[] X=new int[3];
+        int twoX=0;  //2개인 x값
+        int twoY=0;  //2개인 y값
+        int[] X=new int[3];  
         int[] Y=new int[3];
         for(int i=0;i<3;i++) {
         	 st = new StringTokenizer(br.readLine());
@@ -20,7 +20,7 @@ public class Beak_3009 {  //네번째 점
             if(0<i) {
             	for(int j=0;j<i;j++) {
             		if(X[j]==X[i]) {
-            			twoX=X[i];
+            			twoX=X[i];  //중복된 값을 변수에 담기
             		}
             	}
             	for(int j=0;j<i;j++) {
@@ -30,6 +30,7 @@ public class Beak_3009 {  //네번째 점
             	}	
             }
         }
+        //좌표 구하기
         int x=0;
         int y=0;
         for(int i=0;i<3;i++) {
@@ -43,7 +44,5 @@ public class Beak_3009 {  //네번째 점
         	}
         }
         System.out.println(x+" "+y);
-
 	}
-
 }
