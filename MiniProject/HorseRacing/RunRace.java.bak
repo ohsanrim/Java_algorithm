@@ -43,10 +43,20 @@ class RunRace extends Frame implements ActionListener
 		setResizable(false);
 	}
 	public void actionPerformed(ActionEvent e){
+		/*
+		Thread [] t = new Thread[args.length-1];
+		for(int i=0;i<t.length;i++){
+			t[i] = new Thread(racer[i]);
+			t[i].start();
+		}
+		이런 식으로 작성해도 괜찮다. 
+		*/ 
 		if(e.getActionCommand().equals("출발")){
 			for(int i=0;i<r.length;i++){
 				r[i].startThread();
 			}
+			
+
 		}
 	}
 	public static void main(String[] args) 
