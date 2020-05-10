@@ -21,11 +21,7 @@ public class RunningCookie extends JPanel implements Runnable{
 	public HurdleDTO hurdleDTO;
 	public static int cookieY;
 	public ArrayList <HurdleDTO> list;
-	public RunningCookie() {
-		//hurdleDTO= new HurdleDTO();
-		//movingHurdle = new MovingHurdle();
-		//list = new ArrayList <HurdleDTO>();
-	}
+	
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -109,6 +105,7 @@ public class RunningCookie extends JPanel implements Runnable{
 				} 	
 			}
 			repaint();
+			if(MyFrame2.gameDie==true) break;
 		}
 	}
 	public void setSlide(boolean slide) {
