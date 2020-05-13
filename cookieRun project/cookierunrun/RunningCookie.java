@@ -4,8 +4,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.File;
 import java.util.ArrayList;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JPanel;
 
 public class RunningCookie extends JPanel implements Runnable{
@@ -46,7 +50,7 @@ public class RunningCookie extends JPanel implements Runnable{
 		else if(choice==3) { g.drawImage(cookieRun4,80,250, this);cookieY=250;}
 		else if(choice==4) {g.drawImage(cookieRun5, 80,310,120,70,this);cookieY=310;}
 		else if(choice==5) {g.drawImage(cookieRun6, 80,310,120,70,this); cookieY=310;}
-		else if(choice==6) {g.drawImage(cookieRun7, 80,jumpY,100,110, this);cookieY=jumpY ;} 
+		else if(choice==6) {g.drawImage(cookieRun7, 80,jumpY,120,110, this);cookieY=jumpY ;} 
 		else if(choice==7) {g.drawImage(cookieRun8, 80,cookieY,this);}
 		
 		//this.setFocusable(true);
@@ -123,7 +127,7 @@ public class RunningCookie extends JPanel implements Runnable{
 	public void setColl(boolean coll) {
 		this.coll=coll;
 	}
-		
+	
 		
 		
 	

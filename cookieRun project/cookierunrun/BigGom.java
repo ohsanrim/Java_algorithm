@@ -4,8 +4,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.File;
 import java.util.ArrayList;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JPanel;
 
 //점프해야 얻을 수 있는 대형 코인과 대형곰젤리 뿌리기
@@ -66,7 +70,7 @@ public class BigGom extends JPanel implements Runnable {
 		// 리스트 안에 생성된 젤리들 그려주기
 		if (bigList.size() > 0) {
 			for (BigDTO data : bigList) {
-				g.drawImage(data.getRandomIndex()==1?bigGom:bigCoin,data.getX(),BIG_Y,50,50,this);
+				g.drawImage(data.getRandomIndex()==1?bigGom:bigCoin,data.getX(),BIG_Y,60,60,this);
 			}
 		}
 		//프레임 밖을 벗어나면 젤리 지워버리기
@@ -93,6 +97,7 @@ public class BigGom extends JPanel implements Runnable {
 							if(bigList.get(i).getRandomIndex()==1) GomJellyDummy.countGom+=5;
 							else Jelly.coinEat+=5;
 							Jelly.gameScore+=5000;
+							play("src/jelly1.wav");
 						}
 					}
 				}
@@ -118,18 +123,32 @@ public class BigGom extends JPanel implements Runnable {
 	@Override
 	public void run() {
 		while (true) {
-			endTime = System.currentTimeMillis();
-			gamingTime = (int) (endTime - startTime) / 1000;
-			for(BigDTO data:bigList) {
-				data.x--;
+			if(!MyFrame2.gameStop) {
+				endTime = System.currentTimeMillis();
+				gamingTime = (int) (endTime - startTime) / 1000;
+				for (BigDTO data : bigList) {
+					data.x--;
+				}
+				repaint();
+				try {
+					Thread.sleep(3);
+				} catch (InterruptedException e) {
+				}
+				if (MyFrame2.gameDie)
+					break;
 			}
-			repaint();
-			try {
-				Thread.sleep(3);
-			} catch (InterruptedException e) {
-			}
-			if(MyFrame2.gameDie==true) break;
+			
 		}
+	}
+	public void play(String fileName) {
+		try {
+            AudioInputStream ais = AudioSystem.getAudioInputStream(new File(fileName));
+            Clip clip = AudioSystem.getClip();
+            clip.stop();
+            clip.open(ais);
+            clip.start();
+        } catch (Exception e){
+        }
 	}
 }
 

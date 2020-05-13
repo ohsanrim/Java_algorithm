@@ -36,9 +36,9 @@ public class HpBar extends JPanel implements Runnable{
 		gomCount = new JLabel("0");
 		coinCount = new JLabel("0");
 		score= new JLabel("0");
-		gomCount.setFont(new Font("나눔고딕",Font.BOLD,25));  //글씨체 수정 요망
-		coinCount.setFont(new Font("나눔고딕",Font.BOLD,25));
-		score.setFont(new Font("나눔고딕",Font.BOLD,15));
+		gomCount.setFont(new Font("Segoe UI Black",Font.BOLD,25));  //글씨체 수정 요망
+		coinCount.setFont(new Font("Segoe UI Black",Font.BOLD,25));
+		score.setFont(new Font("Segoe UI Black",Font.BOLD,15));
 		gomCount.setForeground(Color.WHITE);
 		coinCount.setForeground(Color.WHITE);
 		score.setForeground(Color.WHITE);
@@ -66,7 +66,9 @@ public class HpBar extends JPanel implements Runnable{
 			g.drawImage(HbBar, 50, 38, (MovingHurdle.health*5),20, this);
 			g.drawImage(HpBar, 10, 20, 550,50, this);
 		} else {
-			if(MovingHurdle.health<0) MyFrame2.gameDie=true;
+			if(MovingHurdle.health<0) {
+				MyFrame2.gameDie=true;
+			} 
 		}
 		//상단 위에 곰젤리&코인을 카운팅하는 위젯 넣기
 		g.drawImage(gomCountBackground,570,30,35,30,this);
@@ -82,15 +84,19 @@ public class HpBar extends JPanel implements Runnable{
 	}
 	@Override
 	public void run() {
-		while(!MyFrame2.gameDie) {
-			MovingHurdle.health--;  // 2초에 1퍼센트 씩 체력 소모
-			
-			try {
-				Thread.sleep(2000);  //1초에 1씩 닳게 하고 싶으면 1000으로 교환해주기
-			} catch (InterruptedException e) {
+		while(true) {
+			if(!MyFrame2.gameStop) {
+				MovingHurdle.health-=2;  // 2초에 1퍼센트 씩 체력 소모
+				try {
+					Thread.sleep(2000);  //1초에 1씩 닳게 하고 싶으면 1000으로 교환해주기
+				} catch (InterruptedException e) {
+				}
+				repaint();
+				if(MyFrame2.gameDie) {
+					break;
+				}
 			}
-			repaint();
-			if(MyFrame2.gameDie==true) break;
+			
 		}
 	}
 }

@@ -4,8 +4,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.File;
 import java.util.ArrayList;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JPanel;
 
 //일정할 시간마다 곰젤리를 뭉터기로 흩뿌려주는 클래스. 곰젤리를 획득하면 점수가 대폭 상승한다. 
@@ -100,6 +104,7 @@ public class GomJellyDummy extends JPanel implements Runnable {
 							dummy.get(i).eat=true;
 							countGom++;
 							Jelly.gameScore+=1000;
+							play("src/jelly1.wav");
 						}
 					}
 				}
@@ -125,23 +130,36 @@ public class GomJellyDummy extends JPanel implements Runnable {
 	@Override
 	public void run() {
 		while(true) {
-			endTime = System.currentTimeMillis();
-			gamingTime = (int) (endTime - startTime) / 1000;
-			
-			if(dummy.size()>0) {
-				for(GomJellyDTO data2 : dummy) {
-					data2.x--;
+			if(!MyFrame2.gameStop) {
+				endTime = System.currentTimeMillis();
+				gamingTime = (int) (endTime - startTime) / 1000;
+				
+				if(dummy.size()>0) {
+					for(GomJellyDTO data2 : dummy) {
+						data2.x--;
+					}
 				}
+				
+				repaint();
+				
+				try {
+					Thread.sleep(3);
+				} catch (InterruptedException e) {
+				}
+				if(MyFrame2.gameDie==true) break;
 			}
 			
-			repaint();
-			
-			try {
-				Thread.sleep(3);
-			} catch (InterruptedException e) {
-			}
-			if(MyFrame2.gameDie==true) break;
 		}
+	}
+	public void play(String fileName) {
+		try {
+            AudioInputStream ais = AudioSystem.getAudioInputStream(new File(fileName));
+            Clip clip = AudioSystem.getClip();
+            clip.stop();
+            clip.open(ais);
+            clip.start();
+        } catch (Exception e){
+        }
 	}
 }
 class GomJellyDTO{

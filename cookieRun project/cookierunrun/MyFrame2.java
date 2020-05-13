@@ -1,24 +1,33 @@
 package cookierunrun;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 /*
 
 */
 class MyFrame2 extends JFrame implements KeyListener,Runnable{
-	//시작 화면 
 	
+	//일시정지 필드
+	public static boolean gameStop=false;
+	//시작 화면 
 	public JButton startBtn;
 	public Image round1;
-	public JLayeredPane lp;
 	public Image startImg;
 	public JPanel p;
 	public BackgroundT backgroundT;
@@ -32,6 +41,7 @@ class MyFrame2 extends JFrame implements KeyListener,Runnable{
 	public JellyDrop jellyDrop;
 	public EndGame endGame;
 	public BigGom bigGom;
+	public Pause pause;
 	//게임 시작 필드
 	public boolean startGame=false;
 	
@@ -39,10 +49,11 @@ class MyFrame2 extends JFrame implements KeyListener,Runnable{
 	public static boolean gameDie=false;
 	//게임 스코어 필드
 	public static int gameScore=0;
+	public JLayeredPane lp;
 	
 	
 	public MyFrame2() {
-		
+		lp = new JLayeredPane();
 		//jellyDrop클래스 호출
 		jellyDrop = new JellyDrop();
 		// 곰젤리 클래스 호출
@@ -79,11 +90,11 @@ class MyFrame2 extends JFrame implements KeyListener,Runnable{
 		bigGom.setting();
 		
 		//게임종료 클래스 호출
-		/*
+		
 		endGame = new EndGame();
 		endGame.setLayout(null);
 		endGame.setBounds(0,0,700,500);
-		*/
+		
 		
 		// 프레임 위에 올리기 
 		//endGame.add(p);
@@ -96,7 +107,6 @@ class MyFrame2 extends JFrame implements KeyListener,Runnable{
 		add(backgroundT);
 		//장애물 리스트 받기
 		//endGame.setVisible(false);
-		//
 		
 		setBounds(200,300,700,500);
 		setVisible(true);
@@ -121,29 +131,26 @@ class MyFrame2 extends JFrame implements KeyListener,Runnable{
 		public void keyPressed(KeyEvent e) {
 			//눌렀을 떄
 			if(e.getKeyCode()==e.VK_DOWN) {
-				if(!runningCookie.jump)  //슬라이드 중이 아닐 떄
+				if(!runningCookie.jump) {  //점프 중이 아닐 떄
 				runningCookie.setSlide(true);
+				//play("src/ch42slide.wav");
+				}
 			} else if(e.getKeyCode()==e.VK_UP) {
-				if(!runningCookie.slide)  //슬라이드 중이 아닐 떄
+				if(!runningCookie.slide) {  //슬라이드 중이 아닐 떄
 				runningCookie.setJump(true);
+				play("src/jump2.wav");
+				}
 			} else if(e.getKeyCode()==e.VK_ENTER) {
 				if(startGame==false) {
 					//allThreadStart();
 					gameStart();
 				}
+			} else if(e.getKeyCode()==e.VK_ESCAPE) {
+				System.out.println("일시정지 클릭");
+				gameStop=true;
+				addPause();
+				//add()pause
 			}
-			/*
-			if(gameDie) {
-				//종료시 나올 패널 넣기
-				backgroundT.setVisible(false);
-				hpBar.setVisible(false);
-				runningCookie.setVisible(false);
-				movingHurdle.setVisible(false);
-				gomJellyDummy.setVisible(false);
-				jelly.setVisible(false);
-				endGame.setVisible(true);
-			}
-			*/
 		}
 		
 		@Override
@@ -155,12 +162,16 @@ class MyFrame2 extends JFrame implements KeyListener,Runnable{
 		@Override
 		public void run() {
 			allThreadStart();
-			while(!gameDie) {
-				if(gameDie) break;
+			while(true) {
+				//System.out.println(gameDie);
+				if(gameDie) {
+					System.out.println("게임 종료");
+					break;
+				}
 			}
-			//this.remove();
+			gameEnd();
 		}
-		public void allThreadStart() {
+		public void allThreadStart(){
 			backgroundT.threadStart();
 			hpBar.threadStart();
 			runningCookie.threadStart();
@@ -170,6 +181,73 @@ class MyFrame2 extends JFrame implements KeyListener,Runnable{
 			jellyDrop.ThreadStart();
 			bigGom.threadStart();
 		}
-	
+		public void play(String fileName) {
+			try {
+	            AudioInputStream ais = AudioSystem.getAudioInputStream(new File(fileName));
+	            Clip clip = AudioSystem.getClip();
+	            clip.stop();
+	            clip.open(ais);
+	            clip.start();
+	        } catch (Exception e){
+	        }
+		}
+		//게임이 종료되면 나오는  frame창
+		public void gameEnd() {
+			this.setVisible(false);
+			endGame = new EndGame();
+			endGame.setLayout(null);
+			endGame.setBounds(200,300,700,500);
+			endGame.setVisible(true);
+			
+		}
+		public void addPause() {
+			pause = new Pause();
+			pause.setLayout(null);
+			pause.setBounds(0,0,700,500);
+			pause.setVisible(true);
+			bigGom.add(pause);
+		}
+}
 
+//일시정지를 눌렀을 떄 나올 페널
+class Pause extends JPanel implements ActionListener{
+	public Image pause;
+	public JButton pauseBtn;
+	public JButton exit;
+	public Pause() {
+		setOpaque(false);
+		pauseBtn = new JButton(new ImageIcon("src/continue.png"));
+		pauseBtn.setBounds(180,350,135,50);
+		add(pauseBtn);
+		exit = new JButton(new ImageIcon("src/exit.png"));
+		exit.setBounds(400,350,135,50);
+		add(exit);
+		pauseBtn.addActionListener(this);
+		exit.addActionListener(this);
+	}
+	public void paintComponent(Graphics g) {
+		// 이미지 생성
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
+		Toolkit t = Toolkit.getDefaultToolkit();
+		pause = t.getImage("src/pause.png");
+		g.drawImage(pause,0,0,this.getWidth(), this.getHeight()-20,this);
+	}
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource()==pauseBtn) {
+			//게임 다시 시작
+			System.out.println("continue 클릭");
+			MyFrame2.gameStop=false;
+			System.out.println(MyFrame2.gameStop);
+		} else if(e.getSource()==exit) {
+			//게임 나가기
+			System.out.println("exit");
+			int answer = JOptionPane.showConfirmDialog(this, "정말로 게임을 나가시겠습니까?(종료시 로비화면으로 이동합니다.)", "confirm", JOptionPane.YES_NO_OPTION);
+			if(answer == JOptionPane.YES_OPTION) {
+				//new TempWindow();  //로비 화면으로 이동
+				MyFrame2.gameDie=true;
+				this.setVisible(false);
+			}
+		}
+	}
 }

@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import javax.swing.JPanel;
 
@@ -109,7 +110,7 @@ public class MovingHurdle extends JPanel implements Runnable {
 				if (data.getImageIndex() == 3 || data.getImageIndex() == 4) {
 					g.drawImage((BackgroundT.round2?round2[data.getImageIndex()]:round1[data.getImageIndex()]), data.getX(), data.getY(), 70, 300, this);
 				} else {
-					g.drawImage(BackgroundT.round2?round2[data.getImageIndex()]:round1[data.getImageIndex()], data.getX(), data.getY(), this);
+					g.drawImage(BackgroundT.round2?round2[data.getImageIndex()]:round1[data.getImageIndex()], data.getX(), data.getY()-20,50,70, this);
 				}
 			}
 		}
@@ -125,11 +126,11 @@ public class MovingHurdle extends JPanel implements Runnable {
 					if (list.get(i).getImageIndex() == 0 || list.get(i).getImageIndex() == 2 || list.get(i).getImageIndex() == 1) {
 							// 하단 장애물과 충돌
 						if (list.get(i).getY() <= cookieY + 80 && list.get(i).getY() > cookieY) {
-							System.out.println("충돌");
+							//System.out.println("충돌");
 							runningCookie.setColl(true);
 							collStart=System.currentTimeMillis();
 							list.remove(i);
-							health-=20;  //충돌 시 체력 하락
+							health-=90;  //충돌 시 체력 하락
 							break;
 						}
 					} else if(list.get(i).getImageIndex() == 3 || list.get(i).getImageIndex() == 4){  
@@ -141,7 +142,7 @@ public class MovingHurdle extends JPanel implements Runnable {
 							runningCookie.setColl(true);
 							collStart=System.currentTimeMillis();
 							list.remove(i);
-							health-=20;  //충돌 시 체력 하락
+							health-=90;  //충돌 시 체력 하락
 							break;
 						}
 					}
@@ -172,21 +173,31 @@ public class MovingHurdle extends JPanel implements Runnable {
 	@Override
 	public void run() {
 		while (true) {
-			// 허들이 정해진 시간마다 출몰함
-			endTime = System.currentTimeMillis();
-			gamingTime = (int) (endTime - startTime) / 1000;
-			// 허들 이미지들의 좌표값을 변경
+			System.out.println(MyFrame2.gameStop);
+			if(!MyFrame2.gameStop) {
+				// 허들이 정해진 시간마다 출몰함
+				endTime = System.currentTimeMillis();
+				gamingTime = (int) (endTime - startTime) / 1000;
+				// 허들 이미지들의 좌표값을 변경
+				// ConcurrentModificationException
+				try {
+					for (HurdleDTO data : movingHurdle) {
+						data.x--;
+					}
+				} catch (ConcurrentModificationException e) {
+
+				}
+
+				repaint();
+				hurdleDisplay = false;
+				try {
+					Thread.sleep(2);
+				} catch (InterruptedException e) {
+				}
+				if (MyFrame2.gameDie)
+					break;
+			}
 			
-			for (HurdleDTO data : movingHurdle) {
-				data.x--;
-			}
-			repaint();
-			hurdleDisplay = false;
-			try {
-				Thread.sleep(2);
-			} catch (InterruptedException e) {
-			}
-			if(MyFrame2.gameDie==true) break;
 		}
 	}
 
