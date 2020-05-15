@@ -40,7 +40,7 @@ public class EndGame extends JFrame implements ActionListener{
 		end.setLayout(null);
 		end.setBounds(0,0,700,450);
 		
-		yesBtn = new JButton(new ImageIcon("src/button/Gameresult.jpg"));
+		yesBtn = new JButton(new ImageIcon("C:\\cookierun\\png\\Gameresult.jpg"));
 		yesBtn.setBounds(245,350,200,60);
 		yesBtn.addActionListener(this);
 		//score라벨 설정
@@ -79,8 +79,14 @@ public class EndGame extends JFrame implements ActionListener{
 	}
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==yesBtn) {
-			new TempWindow();
+			Jelly.gameScore=0;
+			Jelly.coinEat=0;
+			Jelly.gameScore=0;
+			MyFrame.gameDie=false;
+			MovingHurdle.health=100;
+			new LobbyClient();
 			this.setVisible(false);
+			
 		}
 	}
 }
@@ -91,8 +97,9 @@ class EndBack extends JPanel {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 		Toolkit t = Toolkit.getDefaultToolkit();
-		scoreBoard = t.getImage("src/IMAGE/Gameresult.jpg");
+		scoreBoard = t.getImage("C:\\cookierun\\png\\GameresultBack.jpg");
 		g.drawImage(scoreBoard,0,0,this.getWidth(), this.getHeight()-20,this);
 		
 	}
 }
+//스코어 옆에 만약 이긴사람의 창에는 win을 띄워주고 진사랑므이 창에는 lose를 뿌려준다. 경험치를 주면 더욱 좋다. 
