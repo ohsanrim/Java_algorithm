@@ -62,7 +62,7 @@ public class RoomHandler  extends Thread{
 				}//if문의 끝
 
 				// 클라이언트로 보내기	
-				broadcast("[" + nickName + "] " + line); 				
+				broadcast("[" + nickName + "] : " + line); 				
 			}//while
 		}catch(IOException e){
 			e.printStackTrace();

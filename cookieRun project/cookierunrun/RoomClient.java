@@ -47,10 +47,12 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 	public static boolean enterClient = false;
 	private int sw = 0;
 	private Clip clip;
+	
+	//--------------5월 16일 추가 업데이트
 	private int enterCount = 0; // 현재 대기실에 입장한 사람
 	private String nickName;
 	private ArrayList<String> joinUser = new ArrayList<String>();
-	//레디 여부
+	// 레디 여부
 	public boolean meReady = false;
 	public boolean rivalReady = false;
 
@@ -134,7 +136,7 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 		user2.setBounds(85, 15, 65, 65);
 		user2.setForeground(Color.WHITE);
 		panel3.add(user2);
-		readyBtn = new JButton(new ImageIcon("C:\\cookierun\\png\\ready_2.png"));
+		readyBtn = new JButton(new ImageIcon("C:\\cookierun\\png\\ready_1.png"));
 		readyBtn.setBounds(30, 280, 140, 60);
 		panel3.add(rivalReadyBtn);
 		panel.add(panel3);
@@ -204,7 +206,7 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 		// enterClient = true;
 		repaint();
 		// String serverIP = "192.168.147.4";
-		//String serverIP = "192.168.0.153"; 
+		// String serverIP = "192.168.0.153";
 		String serverIP = "172.30.1.28";
 		if (serverIP == null || serverIP.length() == 0) {
 			System.out.println("서버IP가 입력되지 않았습니다.");
@@ -247,30 +249,39 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 			try {
 				// reader은 서버로부터 읽어오는 과정이다.
 				line = reader.readLine(); // line의 기준은 엔터가 기준이다. 엔터 치기전까지의 모든 Line을 읽어 온다
-				//입장했을 떄 몇명이 접속했는지 확인
+				// 입장했을 떄 몇명이 접속했는지 확인
 				if (line.contains("입장")) {
 					System.out.println(enterCount);
 					String[] name = line.split("님");
 					joinUser.add(name[0]);
 					if (joinUser.size() == 2) { // 두명 다 입장
-						System.out.println("2명 다 입장 완료!");
+						// System.out.println("2명 다 입장 완료!");
 						enterClient = true;
 						panel3_1.repaint();
 						user2.setText(joinUser.get(1));
 					}
 				}
-				//ready관련 버튼 클릭
-				if(line.contains("ready")) {  
-					String []temp = line.split(":");
-					if(temp.length==2) {
-						if(!temp[0].contains(nickName)) {
-						if(temp[1].equals("ready")) {
-							rivalReady=true;
-							if(meReady) { gameStart(); }
-						} else {
-							rivalReady=false;
+				// ready관련 버튼 클릭
+				if (line.contains("ready")) {
+					// System.out.println("레디를 눌렀나?");
+					String[] temp = line.split(":");
+					System.out.println("래디 했니...?" + temp[1]);
+					if (temp.length == 2) {
+						if (!temp[0].contains(nickName)) { // 상대방의 메세지
+							System.out.println(temp[1]);
+							if (temp[1].equals(" ready")) {
+								System.out.println("상대방 레디완료");
+								rivalReady = true;
+								rivalReadyBtn.setIcon(new ImageIcon("C:\\cookierun\\png\\ready_1.png"));
+								if (meReady) {
+									gameStart();
+								}
+							} else {
+								System.out.println("상대방 언레디");
+								rivalReady = false;
+								rivalReadyBtn.setIcon(new ImageIcon("C:\\cookierun\\png\\ready_2.png"));
+							}
 						}
-					}
 					}
 				}
 
@@ -281,9 +292,9 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 				}
 
 				//
-				System.out.println("클라이어ㄴ트 2번" + line);
+				// System.out.println("클라이어ㄴ트 2번" + line);
 				if (line == null || line.equals("exit")) {
-					System.out.println("제발 들어와라");
+					// System.out.println("제발 들어와라");
 					// 통신 끊기
 
 					reader.close(); // 읽기 끊기
@@ -310,29 +321,22 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 
 	@Override // Override는 생성자 밖에 해야된다.
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == rivalReadyBtn) {
-			// setVisible(false);
-			dispose();
-			clip.close();
-			// Loading loadFrame =new Loading();
-			new Loading();
-		} else if (e.getSource() == readyBtn) {
+		if (e.getSource() == readyBtn) {
 			if (sw == 0) {
-				rivalReadyBtn.setEnabled(true);
 				sw++;
 				readyBtn.setIcon(new ImageIcon("C:\\cookierun\\png\\ready_1.png"));
 				meReady = true;
 				writer.println("ready");
 				writer.flush();
-				if(meReady==true&&rivalReady==true) {
+				if (meReady == true && rivalReady == true) {
 					gameStart();
 				}
 			} else if (sw == 1) {
 				rivalReadyBtn.setEnabled(false);
 				sw--;
 				readyBtn.setIcon(new ImageIcon("C:\\cookierun\\png\\ready_2.png"));
-				meReady=false;
-				writer.println("unReady");
+				meReady = false;
+				writer.println("unready");
 				writer.flush();
 			}
 		} else if (e.getSource() == outBtn) {
@@ -348,8 +352,11 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 		writer.flush();
 		input.setText("");
 	}
+
 	public void gameStart() {
-		new MyFrame().gameStart();;
+		dispose();
+		clip.close();
+		new Loading();
 	}
 }
 
@@ -395,8 +402,7 @@ class Loading extends JFrame implements Runnable {
 		setVisible(false);
 		new MyFrame();
 	}
-	
-	
+
 }
 
 class Panel3_1 extends JPanel {

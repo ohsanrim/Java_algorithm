@@ -49,7 +49,7 @@ class LobbyClient extends JFrame implements ActionListener, Runnable{
 	    private JTextField chatT;   
 	    private AudioInputStream ais;
 	    private Clip clip;
-	    public static String nickName="딸기";
+	    public static String nickName="바나나";
 	  
 
 	    
