@@ -9,7 +9,7 @@ class Login extends Frame implements ActionListener, WindowListener
 	private final String ID="angel";
 	private final String PWD="1004";
 	private String id, pwd;
-	public boolean loginLesult;
+	public boolean loginResult;
 
 
 	public Login(){
@@ -46,17 +46,15 @@ class Login extends Frame implements ActionListener, WindowListener
 		//어떤 버튼을 클릭했는지 확인
 		if(e.getActionCommand()=="로그인"){
 			this.id=idT.getText();
-			System.out.println(idT.getText());
 			this.pwd=pwdT.getText();
-			System.out.println(pwdT.getText());
 			idT.setText(" "); idT.setText("");
 			pwdT.setText(" "); pwdT.setText("");
 			if(ID.equals(id)&&PWD.equals(pwd)){
-				loginLesult=true;
-				new LoginResult(loginLesult);
+				loginResult=true;
+				new LoginResult(loginResult);
 			} else {
-				loginLesult=false;
-				new LoginResult(loginLesult);
+				loginResult=false;
+				new LoginResult(loginResult);
 			}
 		} else if(e.getSource()==exit){
 			idT.setText(" "); idT.setText("");
@@ -74,7 +72,6 @@ class Login extends Frame implements ActionListener, WindowListener
 	public static void main(String[] args) 
 	{
 		new Login();
-
 	}
 }
 
