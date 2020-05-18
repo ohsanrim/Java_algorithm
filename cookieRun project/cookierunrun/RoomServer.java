@@ -12,7 +12,7 @@ public class RoomServer {
 	public RoomServer() {
 		try{
 			serverSocket = new ServerSocket(8888); // 같은 방안의 포트 번호를 준다.
-			System.out.println("서버2 준비완료...."); // 9500 port를 열고 사람이 들어 올때까지 기다린다.
+			System.out.println("1번방 서버 준비완료...."); // 9500 port를 열고 사람이 들어 올때까지 기다린다.
 			list = new ArrayList<RoomHandler>(); // 여기 리스트안에는 핸들러가 담겨야 하기때문에 제너릭을 걸어서 핸들러 타입을 담겠다고 한다.
 			while(true){ // 클라이언트를 들어 올때마다 낚아 채야 하기 때문에 while문 돌린다
 				Socket socket = serverSocket.accept(); // 들어오는 족족 클라이언트를 낚아챈다.
@@ -21,9 +21,7 @@ public class RoomServer {
 				list.add(handler); // list안에 핸들러를 넣는다.
 			}
 		}catch(IOException e){
-			e.printStackTrace();
-		}
-		
+		}		
 	}
 	public static void main(String[] args) {
 		new RoomServer();

@@ -17,19 +17,22 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 //게임이 종료되면 나올 패널
 public class EndGame extends JFrame implements ActionListener{
-	//라벨 생성 필드
 	
-	public JButton yesBtn;
-	public JLabel gameScoreL;
-	public JLabel score;
-	public JLabel gomScore;
-	public JLabel coinScore;
-	//스티링 형식 변환
-	public DecimalFormat df = new DecimalFormat("#,##0");
+	private LoginDTO loginDTO;
+	private  JButton yesBtn;
+	private  JLabel gameScoreL;
+	private  JLabel score;
+	private  JLabel gomScore;
+	private  JLabel coinScore;
+	
+	private  DecimalFormat df = new DecimalFormat("#,##0");
 	//패널 선언
-	public JPanel p;
-	public EndBack end;
-	public EndGame() {
+	private  JPanel p;
+	private  EndBack end;
+	
+	public EndGame(LoginDTO loginDTO) {
+		this.loginDTO = loginDTO;
+		
 		this.setSize(700, 460);
 		this.setLayout(null);
 		p = new JPanel();
@@ -39,6 +42,24 @@ public class EndGame extends JFrame implements ActionListener{
 		p.setBounds(0,0,700,500);
 		end.setLayout(null);
 		end.setBounds(0,0,700,450);
+		JPanel bubbleP = new JPanel() {
+			private Image win;
+			private Image lose;
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+		        this.setSize(100,100);
+		        Graphics2D g2d = (Graphics2D) g;
+		        Toolkit t = Toolkit.getDefaultToolkit();
+				win = t.getImage("C:\\cookierun\\png\\Win.png");
+				lose = t.getImage("C:\\cookierun\\png\\Lose.png");
+				if(GameClient.rivalScore>Jelly.gameScore) {
+					g.drawImage(lose,0,0,this.getWidth(),this.getHeight(),this);
+				} else {
+					g.drawImage(win,0,0,this.getWidth(),this.getHeight(),this);
+				}
+			}
+		}; 
+		bubbleP.setBounds(100,100,100,100);		
 		
 		yesBtn = new JButton(new ImageIcon("C:\\cookierun\\png\\Gameresult.jpg"));
 		yesBtn.setBounds(245,350,200,60);
@@ -67,26 +88,35 @@ public class EndGame extends JFrame implements ActionListener{
 		coinScore = new JLabel();
 		coinScore.setFont(new Font("Segoe UI Black",Font.BOLD,30));
 		coinScore.setForeground(Color.gray);
-		coinScore.setBounds(540,260,300,100);		
-		coinScore.setText(df.format(Jelly.coinEat));
+		coinScore.setBounds(540,260,300,100);	
+		if(GameClient.rivalScore>Jelly.gameScore) {
+			coinScore.setText("0");
+		} else {
+			coinScore.setText(df.format(Jelly.coinEat));
+		}
+		
 		//패널 위에 올리기
 		p.add(gomScore);
 		p.add(coinScore);
 		p.add(gameScoreL);
 		p.add(yesBtn);
+		// 0517하린 추가
+		p.add(bubbleP);
 		end.add(p);
 		add(end);
 	}
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==yesBtn) {
+			BackgroundT.round2=false;			
 			Jelly.gameScore=0;
 			Jelly.coinEat=0;
 			Jelly.gameScore=0;
-			MyFrame.gameDie=false;
+			GameClient.gameDie=false;
 			MovingHurdle.health=100;
-			new LobbyClient();
+			GameClient.rivalGameDie=false;
+			GameClient.competitionScore="0";
+			new LobbyClient(loginDTO).service();
 			this.setVisible(false);
-			
 		}
 	}
 }

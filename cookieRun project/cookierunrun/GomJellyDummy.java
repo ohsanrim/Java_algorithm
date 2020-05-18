@@ -137,8 +137,7 @@ class GomJellyDummy extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        while (!MyFrame.gameDie) {
-
+        while (!GameClient.gameDie) {
             endTime = System.currentTimeMillis();
             gamingTime = (int) (endTime - startTime) / 1000;
 
@@ -152,7 +151,7 @@ class GomJellyDummy extends JPanel implements Runnable {
                 Thread.sleep(3);
             } catch (InterruptedException e) {
             }
-            if (MyFrame.gameDie == true) break;  //확인사살로 한개 더 만들어 둠
+            if (GameClient.gameDie == true) break;  //확인사살로 한개 더 만들어 둠
         }
     }
     //음악을 재생해주는 메소드

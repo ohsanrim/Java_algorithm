@@ -46,7 +46,6 @@ public class MovingHurdle extends JPanel implements Runnable {
     // 클래스 선언 필드
     public HurdleDTO hurdleDTO;
     public RunningCookie runningCookie;
-
     // 생성자
     public MovingHurdle() {
         runningCookie = new RunningCookie();
@@ -87,7 +86,6 @@ public class MovingHurdle extends JPanel implements Runnable {
         // 장애물 이미지를 랜덤으로 설정함
         if (hurdleTime.get(0) == gamingTime) {
             int i = (int) (Math.random() * 5) + 1; // 1~5까지의 난수 발생
-            // System.out.println("i=" + i);
             // 초기 셋팅
             if (i >= 1 && i <= 3) {
                 hurdleDTO = new HurdleDTO(i - 1);
@@ -129,7 +127,6 @@ public class MovingHurdle extends JPanel implements Runnable {
                             || list.get(i).getImageIndex() == 1) {
                         // 하단 장애물과 충돌
                         if (list.get(i).getY() <= cookieY + 80 && list.get(i).getY() > cookieY) {
-                            // System.out.println("충돌");
                             runningCookie.setColl(true);
                             collStart = System.currentTimeMillis();
                             list.remove(i);
@@ -138,10 +135,7 @@ public class MovingHurdle extends JPanel implements Runnable {
                         }
                     } else if (list.get(i).getImageIndex() == 3 || list.get(i).getImageIndex() == 4) {
                         // 상단 장애물과 충돌
-                        // System.out.println(list.get(i).getImageIndex());
                         if (list.get(i).getY() + 300 >= cookieY) {
-                            // System.out.println("장애물=" + list.get(i).getY()+300 + "쿠키Y" + cookieY);
-                            // System.out.println("충돌");
                             runningCookie.setColl(true);
                             collStart = System.currentTimeMillis();
                             list.remove(i);
@@ -155,8 +149,6 @@ public class MovingHurdle extends JPanel implements Runnable {
         // 충돌 1초 지나면 이미지 원상복귀
         if (runningCookie.coll == true) {
             collEnd = System.currentTimeMillis();
-            System.out.println(collEnd);
-            System.out.println(collStart);
             collTime = (int) (collEnd - collStart) / 100;
             if (collTime == 2) {
                 runningCookie.setColl(false);
@@ -169,16 +161,14 @@ public class MovingHurdle extends JPanel implements Runnable {
                 movingHurdle.remove(i);
         }
     }
-
     public void threadStart() {
         Thread t = new Thread(this);
         startTime = System.currentTimeMillis();
         t.start();
     }
-
     @Override
     public void run() {
-        while (!MyFrame.gameDie) {
+        while (!GameClient.gameDie) {
             // 허들이 정해진 시간마다 출몰함
             endTime = System.currentTimeMillis();
             gamingTime = (int) (endTime - startTime) / 1000;
@@ -196,9 +186,8 @@ public class MovingHurdle extends JPanel implements Runnable {
                 Thread.sleep(2);
             } catch (InterruptedException e) {
             }
-            if (MyFrame.gameDie)
+            if (GameClient.gameDie)
                 break;
-
         }
     }
 

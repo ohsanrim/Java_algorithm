@@ -50,7 +50,6 @@ public class BigGom extends JPanel implements Runnable {
                 break;
         }
     }
-
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         this.setSize(700, 460);
@@ -82,7 +81,8 @@ public class BigGom extends JPanel implements Runnable {
                         bigList.remove(data);
                 }
             }
-        } catch (Exception e) {  }
+        } catch (Exception e) {  
+        }
 
         // 쿠키와 부딪히면 젤리가 사라지게 만들기
         int cookieX = runningCookie.COOKIE_X;
@@ -122,7 +122,7 @@ public class BigGom extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        while (!MyFrame.gameDie) {   //게임 종료시까지 플레이
+        while (!GameClient.gameDie) {   //게임 종료시까지 플레이
             endTime = System.currentTimeMillis();
             gamingTime = (int) (endTime - startTime) / 1000;
             for (BigDTO data : bigList) {
@@ -131,9 +131,8 @@ public class BigGom extends JPanel implements Runnable {
             repaint();
             try {
                 Thread.sleep(3);
-            } catch (InterruptedException e) {
-            }
-            if (MyFrame.gameDie)
+            } catch (InterruptedException e) {}
+            if (GameClient.gameDie)
                 break;
         }
     }
@@ -145,8 +144,7 @@ public class BigGom extends JPanel implements Runnable {
             clip.stop();
             clip.open(ais);
             clip.start();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) {}
     }
 }
 //큰 곰 젤리 한개의 좌표값을 담고있는 DTO클래스
@@ -179,5 +177,4 @@ class BigDTO {
     public int getRandomIndex() {
         return randomIndex;
     }
-
 }

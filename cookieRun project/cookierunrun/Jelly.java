@@ -1,4 +1,5 @@
 package cookierunrun;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -24,7 +25,6 @@ public class Jelly extends JPanel implements Runnable {
     // score 필드 생성
     public static int gameScore = 0;
     public static int coinEat = 0;
-
     // 기본값 세팅
     public void setting() {
         runningCookie = new RunningCookie();
@@ -39,8 +39,7 @@ public class Jelly extends JPanel implements Runnable {
         // 이미지 생성
         Toolkit t = Toolkit.getDefaultToolkit();
         jelly = t.getImage("C:\\cookierun\\png\\jelly.png");
-        coin = t.getImage("C:\\cookierun\\png\\minicoin.png");
-        
+        coin = t.getImage("C:\\cookierun\\png\\minicoin.png");        
         // list안의 젤리를 패널에 그려주기
         try {
             if (list.size() > 0) {
@@ -49,6 +48,7 @@ public class Jelly extends JPanel implements Runnable {
                 }
             }
         } catch (Exception e) {
+        	e.printStackTrace();
         }
         
         // 젤리 위를 지나가면 젤리가 사라지게 만들기
@@ -74,7 +74,7 @@ public class Jelly extends JPanel implements Runnable {
                     list.remove(data);
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception e) {        	
         }
     }
     
@@ -85,7 +85,7 @@ public class Jelly extends JPanel implements Runnable {
     }
     
     public void run() {
-        while (!MyFrame.gameDie) {
+        while (!GameClient.gameDie) {
             try {
                 if (list.size() > 0) {
                     for (JellyDTO data : list) {
@@ -99,7 +99,7 @@ public class Jelly extends JPanel implements Runnable {
                 Thread.sleep(3); // 초단위로 진행됨
             } catch (InterruptedException e) {
             }
-            if (MyFrame.gameDie)
+            if (GameClient.gameDie)
                 break;
         }
 

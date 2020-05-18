@@ -23,46 +23,34 @@ class LobbyHandler extends Thread {	// 클라이언트의 소켓 쓰레드 부�
 		writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream())); // 클라이언트로 받는 곳
 	} // ChatHandler생성자
 	
-	public void run(){
-	
+	public void run(){	
 		// 클라이언트로 부터 받기
 		// 닉네임 받기
 		try{
 			String nickName = reader.readLine(); // 한줄씩 읽는다. 닉네임을 읽는거고
 			broadcast(nickName + "님이 입장하였습니다."); // 모든 클라이언트에게 입장 메시지를 보내기.
-			//System.out.println("list의 인원 수: "+list.size());
-			
 			String line; // 내용을 읽기 위해서
 			while(true){
 				line = reader.readLine();
 				if(line == null || line.equals("exit")){ // 스레드는 한번씩 백그라운드에서 돌기때문에 null 값이 들어 온다
-					// 나한테 보내느거?
-					// 나가려고 exit를 보낸 클라이언트에게 답변 보내기?
-					System.out.println("로비 핸들러 소켓 끊기");
-					//클라이언트한테 exit
 					writer.println("exit");
 					writer.flush();
 
 					reader.close(); // 나와 서버와의 연결되있던걸 다 끊어준다.
 					writer.close(); // 나와 서버와의 연결되있던걸 다 끊어준다.
 					socket.close(); // 나와 서버와의 연결되있던걸 다 끊어준다.
-
-
 					// 남아있는 클라이언트
 					// Arraylist 에서 퇴장한사람을 없애야 한다.
 					list.remove(this);
 
 					broadcast(nickName + "님이 퇴장하였습니다.");
 					break; // 와일문 나가기
-					//System.exit(0);
 				}//if문의 끝
-
 				// 클라이언트로 보내기	
 				broadcast("[" + nickName + "] " + line); 				
 			}//while
 
 		}catch(IOException e){
-			e.printStackTrace();
 		}
 	}
 	public void broadcast(String mag){
@@ -70,7 +58,5 @@ class LobbyHandler extends Thread {	// 클라이언트의 소켓 쓰레드 부�
 			handler.writer.println(mag);
 			handler.writer.flush();
 		}// for
-
 	}
-
 }

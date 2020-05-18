@@ -45,26 +45,28 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 	private JTextField input;
 	private JButton outBtn;
 	public static boolean enterClient = false;
+
 	private int sw = 0;
 	private Clip clip;
+	private LoginDTO loginDTO;
+	private boolean gameStart = false;
 	
-	//--------------5월 16일 추가 업데이트
-	private int enterCount = 0; // 현재 대기실에 입장한 사람
+	private int enterCount = 0; 
 	private String nickName;
 	private ArrayList<String> joinUser = new ArrayList<String>();
 	// 레디 여부
 	public boolean meReady = false;
 	public boolean rivalReady = false;
-
-	public RoomClient(Clip clip) {
+	
+	public RoomClient(LoginDTO loginDTO, Clip clip) {
 		super("대기화면");
 		this.clip = clip;
-		nickName = LobbyClient.nickName;
-
+		this.loginDTO = loginDTO;		
+		nickName = loginDTO.getNickName();
+				
 		Image img = new ImageIcon().getImage();
 		panel = new JPanel() {
 			ImageIcon icon = new ImageIcon("C:\\cookierun\\png\\fruit.png");
-
 			public void paintComponent(Graphics g) {
 				g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), null);
 				setOpaque(false);
@@ -76,7 +78,6 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 
 		panel2 = new JPanel() {
 			ImageIcon icon = new ImageIcon("C:\\cookierun\\png\\id_form.png");
-
 			public void paintComponent(Graphics g) {
 				g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), null);
 				setOpaque(false);
@@ -95,7 +96,7 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 			}
 		};
 		panel2_1.setLayout(null);
-		user1 = new JLabel(nickName);
+		user1 = new JLabel(loginDTO.getNickName());
 		user1.setBounds(85, 15, 65, 65);
 		user1.setForeground(Color.WHITE);
 		panel2.add(user1);
@@ -103,16 +104,12 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 		rivalReadyBtn = new JButton(new ImageIcon("C:\\cookierun\\png\\ready_2.png"));
 		rivalReadyBtn.setBounds(30, 280, 140, 60);
 		rivalReadyBtn.setEnabled(false);
-		//
 
 		panel2_1.setBounds(20, 85, 170, 170);
 		panel2.add(panel2_1);
 
 		panel3 = new JPanel() {
-			// private static final long serialVersionUID = 1L;
-
 			ImageIcon icon = new ImageIcon("C:\\cookierun\\png\\id_form.png");
-
 			public void paintComponent(Graphics g) {
 				g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), null);
 				setOpaque(false);
@@ -120,32 +117,22 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 			}
 		};
 		panel3.setLayout(null);
-		panel3.setBounds(470, 50, 200, 400);
+		panel3.setBounds(470, 50, 200, 400);		
 		panel3_1 = new Panel3_1();
-
-		/*
-		 * panel3_1 = new JPanel() { public void paintComponent(Graphics g) {
-		 * System.out.println(enterClient); if(enterClient) { Image image =
-		 * Toolkit.getDefaultToolkit().getImage("C:\\cookierun\\png\\cookie_girl.gif");
-		 * g.drawImage(image, 0, 0, getWidth(), getHeight(), this); } setOpaque(false);
-		 * super.paintComponent(g); } }; panel3_1.setBounds(20, 85, 170, 170);
-		 * panel3_1.setLayout(null);
-		 */
-		panel3.add(panel3_1);
-		user2 = new JLabel("사용자2");
+		panel3.add(panel3_1);	
+		user2 = new JLabel("");
 		user2.setBounds(85, 15, 65, 65);
 		user2.setForeground(Color.WHITE);
+		user2.setOpaque(false);
 		panel3.add(user2);
-		readyBtn = new JButton(new ImageIcon("C:\\cookierun\\png\\ready_1.png"));
+
+		readyBtn = new JButton(new ImageIcon("C:\\cookierun\\png\\ready_2.png"));
 		readyBtn.setBounds(30, 280, 140, 60);
-		panel3.add(rivalReadyBtn);
-		panel.add(panel3);
-
+		panel.add(panel3);		
 		panel2.add(readyBtn);
-
+		panel3.add(rivalReadyBtn);
 		panel4 = new JPanel(new BorderLayout());
 		output = new JTextArea();
-		// output.setFont(new Font("새굴림", Font.BOLD, 20));
 		output.setBackground(new Color(255, 188, 121));
 		output.setEditable(false);
 		JScrollPane scroll = new JScrollPane(output);
@@ -162,13 +149,11 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 		panel4_1.add("East", sendBtn);
 
 		panel4.add("South", panel4_1);
-
 		panel4.setBounds(265, 155, 180, 240);
 		panel.add(panel4);
 
 		panel5 = new JPanel() {
 			ImageIcon icon = new ImageIcon("C:\\cookierun\\png\\cookieRun.png");
-
 			public void paintComponent(Graphics g) {
 				g.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), null);
 				setOpaque(false);
@@ -179,7 +164,7 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 		panel5.setBounds(255, 15, 200, 100);
 
 		panel.add(panel5);
-
+		
 		outBtn = new JButton(new ImageIcon("C:\\cookierun\\png\\out.png"));
 		outBtn.setBounds(550, 8, 130, 45);
 		panel.add(outBtn);
@@ -187,6 +172,7 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 		setBounds(200, 100, 700, 500);
 		setResizable(false);
 		setVisible(true);
+
 		outBtn.addActionListener(this);
 		rivalReadyBtn.addActionListener(this);
 		readyBtn.addActionListener(this);
@@ -194,25 +180,21 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				// System.out.println("엑스누르면 들어 오나?");
 				writer.println("exit");
 				writer.flush();
 				System.out.println("대기방 엑스버튼");
 			}
 		});
 	}
-
-	public void service() {
-		// enterClient = true;
-		repaint();
-		// String serverIP = "192.168.147.4";
-		// String serverIP = "192.168.0.153";
-		String serverIP = "172.30.1.28";
+	public void service() {		
+		//String serverIP = "192.168.0.159"; // 이렇게 적으면 바로 서버로 들어간다 IP안치고
+		//String serverIP = "192.168.0.153";	
+		String serverIP = "192.168.0.153";
 		if (serverIP == null || serverIP.length() == 0) {
 			System.out.println("서버IP가 입력되지 않았습니다.");
 			System.exit(0);
 		}
-
+		String nickName = loginDTO.getNickName();
 		try {
 			// 소켓생성
 			socket = new Socket(serverIP, 8888); // 아이피는 위에있는거고 port 는 고정? 꼭 9500써야하나
@@ -238,9 +220,8 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 		// 이벤트 처리
 		sendBtn.addActionListener(this); // 이거는 샌드버튼 눌렀을때 한다
 		input.addActionListener(this); // 타자를 치고 엔터를 쳤을때 나타낸다
-
+	
 	} // service생성자
-
 	@Override
 	public void run() {
 		String line;
@@ -251,64 +232,91 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 				line = reader.readLine(); // line의 기준은 엔터가 기준이다. 엔터 치기전까지의 모든 Line을 읽어 온다
 				// 입장했을 떄 몇명이 접속했는지 확인
 				if (line.contains("입장")) {
-					System.out.println(enterCount);
 					String[] name = line.split("님");
 					joinUser.add(name[0]);
 					if (joinUser.size() == 2) { // 두명 다 입장
-						// System.out.println("2명 다 입장 완료!");
 						enterClient = true;
 						panel3_1.repaint();
-						user2.setText(joinUser.get(1));
+						user2.setText(name[0]);
+						readyBtn.setEnabled(true);
+					} else if (joinUser.size() == 1) { // 혼자 먼저 입장했을 떄
+						readyBtn.setEnabled(false);
 					}
 				}
 				// ready관련 버튼 클릭
 				if (line.contains("ready")) {
-					// System.out.println("레디를 눌렀나?");
 					String[] temp = line.split(":");
-					System.out.println("래디 했니...?" + temp[1]);
 					if (temp.length == 2) {
-						if (!temp[0].contains(nickName)) { // 상대방의 메세지
-							System.out.println(temp[1]);
-							if (temp[1].equals(" ready")) {
-								System.out.println("상대방 레디완료");
+						if (!temp[0].equals(nickName)) { // 상대방의 메세지  -수정(equals)로 변경
+							if ((temp[1].trim()).equals("ready")) {
 								rivalReady = true;
 								rivalReadyBtn.setIcon(new ImageIcon("C:\\cookierun\\png\\ready_1.png"));
 								if (meReady) {
 									gameStart();
 								}
 							} else {
-								System.out.println("상대방 언레디");
 								rivalReady = false;
 								rivalReadyBtn.setIcon(new ImageIcon("C:\\cookierun\\png\\ready_2.png"));
 							}
+						} else { // 내가 보낸 ready메세지==ready버튼을 누를 경우와 동일한 결과값을 출력해야만 함
+							if ((temp[1].trim()).equals("ready")) {
+								sw++;
+								readyBtn.setIcon(new ImageIcon("C:\\cookierun\\png\\ready_1.png"));
+								meReady = true;
+								if (rivalReady) {
+									gameStart();
+								}
+							} else if ((temp[1].trim()).equals("unready")) {
+								sw--;
+								readyBtn.setIcon(new ImageIcon("C:\\cookierun\\png\\ready_2.png"));
+								meReady = false;
+							}
+
 						}
+					}
+				}
+				// 상대방이 퇴장했을 경우
+				if (line.contains("퇴장")) {
+					String[] name = line.split("님");
+					if (!name[0].equals(nickName)) {
+						for(String data : joinUser) {
+							if(data.equals(name[0])) {
+								joinUser.remove(data);
+								break;
+							}
+						}
+						enterClient = false;
+						panel3_1.repaint();
+						user2.setText("");
+						sw = 0;
+						readyBtn.setIcon(new ImageIcon("C:\\cookierun\\png\\ready_2.png"));
+						readyBtn.setEnabled(false);
 					}
 				}
 
 				if (line.contains("게임을 시작하시려면 READY를 눌러주세요!")) {
-					System.out.println("2명 다 입장 완료!");
+					readyBtn.setEnabled(true);
 					enterClient = true;
 					panel3_1.repaint();
 				}
 
-				//
-				// System.out.println("클라이어ㄴ트 2번" + line);
-				if (line == null || line.equals("exit")) {
-					// System.out.println("제발 들어와라");
-					// 통신 끊기
-
+				if (line == null || line.equals("exit")) {   //내가 나갈 때
 					reader.close(); // 읽기 끊기
 					writer.close(); // 쓰기 끊기
 					socket.close(); // 소켓 끊기
-					System.out.println("대기방 소켓끊느거다");
-					dispose(); // 창을끄고
+					for(String data : joinUser) {
+						if(data.equals(nickName)) {
+							joinUser.remove(data);
+							break;
+						}
+					}
+					if (!gameStart) {  
+						new LobbyClient(loginDTO).service();
+					}
+					gameStart=false;
 					break;
-					// setVisible(false);
-					// System.exit(0); // 프로그램 종료
 				}
 				output.append(line + "\n");
-
-				// 스크롤바를 항상 아래로 넣기
 				int pos = output.getText().length();
 				output.setCaretPosition(pos);
 
@@ -316,26 +324,17 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 				e.printStackTrace();
 			}
 		}
-		new LobbyClient().service();
+		dispose();
 	}
 
-	@Override // Override는 생성자 밖에 해야된다.
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == readyBtn) {
 			if (sw == 0) {
-				sw++;
-				readyBtn.setIcon(new ImageIcon("C:\\cookierun\\png\\ready_1.png"));
-				meReady = true;
 				writer.println("ready");
 				writer.flush();
-				if (meReady == true && rivalReady == true) {
-					gameStart();
-				}
+
 			} else if (sw == 1) {
-				rivalReadyBtn.setEnabled(false);
-				sw--;
-				readyBtn.setIcon(new ImageIcon("C:\\cookierun\\png\\ready_2.png"));
-				meReady = false;
 				writer.println("unready");
 				writer.flush();
 			}
@@ -354,61 +353,75 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 	}
 
 	public void gameStart() {
-		dispose();
+		gameStart = true;
+		joinUser.clear();
+		enterClient = false;
+		panel3_1.repaint();
+		user2.setText("");
+		sw = 0;
+		meReady=false;
+		rivalReady=false;
+		readyBtn.setIcon(new ImageIcon("C:\\cookierun\\png\\ready_2.png"));
 		clip.close();
-		new Loading();
+		new Loading(loginDTO);
+		writer.println("exit");
+		writer.flush();
 	}
 }
 
-class Loading extends JFrame implements Runnable {
-	private JProgressBar jpb = new JProgressBar(JProgressBar.HORIZONTAL, 0, 100);
+class Loading extends JFrame implements Runnable{
+    private JProgressBar jpb = new JProgressBar(JProgressBar.HORIZONTAL,0,100);
+    private LoginDTO loginDTO;
+    public Loading(LoginDTO loginDTO) {
+    	
+    	super("로딩 화면");
+    	this.loginDTO = loginDTO;
+        
+        JPanel panel = new JPanel() {                
+            public void paintComponent(Graphics g) {
+                Image image = Toolkit.getDefaultToolkit().getImage("C:\\cookierun\\png\\load.gif");
+                g.drawImage(image, 0, 0, getWidth (), getHeight (), this);
+                setOpaque(false);
+                super.paintComponent(g);
+            }
+        };
+        add("Center",panel);
+        jpb.setStringPainted(true);
+        jpb.setString("0%");
+        add("South", jpb);
+        
+        setBounds(400,200,300,350);
+        setResizable(false);
+        setVisible(true);
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
 
-	public Loading() {
-		super("로딩 화면");
-
-		JPanel panel = new JPanel() {
-
-			public void paintComponent(Graphics g) {
-				Image image = Toolkit.getDefaultToolkit().getImage("C:\\cookierun\\png\\load.gif");
-
-				g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
-				setOpaque(false);
-				super.paintComponent(g);
 			}
-		};
-		add("Center", panel);
-		jpb.setStringPainted(true);
-		jpb.setString("0%");
-		add("South", jpb);
-
-		setBounds(400, 200, 300, 350);
-		setResizable(false);
-		setVisible(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		Thread th = new Thread(this);
-		th.start();
-	}
-
-	public void run() {
-		for (int i = 0; i <= 100; i++) {// 여기서 i=0으로 바꾸면 멈춤을 눌렀다가 다시 시작을 눌렀을 때 0%부터 다시 올라감
-			try {
-				Thread.sleep(60);
-			} catch (InterruptedException ee) {
-			}
-			jpb.setValue(i);
-			jpb.setString(i + "%");
-		}
-		setVisible(false);
-		new MyFrame();
-	}
-
+		});
+        
+        Thread th = new Thread(this);
+        th.start();
+    }
+    public void run() {
+    	for(int i=0;i<=100;i++){//여기서 i=0으로 바꾸면 멈춤을 눌렀다가 다시 시작을 눌렀을 때 0%부터 다시 올라감
+    		try{
+                Thread.sleep(60);
+            }
+            catch(InterruptedException ee){
+            }
+            jpb.setValue(i);
+            jpb.setString(i+"%");
+        }
+    	dispose();
+        new GameClient(loginDTO).service();
+    }
 }
 
 class Panel3_1 extends JPanel {
 	public Panel3_1() {
 		setBounds(20, 85, 170, 170);
 		setLayout(null);
+		setOpaque(false);
 	}
 
 	public void paintComponent(Graphics g) {
@@ -418,7 +431,5 @@ class Panel3_1 extends JPanel {
 			g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 		}
 		setOpaque(false);
-
 	}
-
 }

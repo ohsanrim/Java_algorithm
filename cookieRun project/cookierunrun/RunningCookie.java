@@ -1,14 +1,11 @@
 package cookierunrun;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.io.File;
 import java.util.ArrayList;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.JPanel;
 
 public class RunningCookie extends JPanel implements Runnable{
@@ -26,7 +23,7 @@ public class RunningCookie extends JPanel implements Runnable{
 	//클래스 호출해주는 필드
 	public MovingHurdle movingHurdle;  
 	public HurdleDTO hurdleDTO;  
-	
+	 	
 	//변화하는 y값의 좌표를 다른 클래스에서 참조할 수 있도록 static으로 설정
 	public static int cookieY;
 	public ArrayList <HurdleDTO> list;
@@ -49,8 +46,7 @@ public class RunningCookie extends JPanel implements Runnable{
 		cookieRun7 = t.getImage("C:\\cookierun\\png\\jump0.png");
 		
 		//장애물레 부딪혔을 떄 나오는 이미지
-		cookieRun8 = t.getImage("C:\\cookierun\\png\\Char_Hit.png");
-		
+		cookieRun8 = t.getImage("C:\\cookierun\\png\\Char_Hit.png");		
 		// 사진 전환하기
 		if(choice==0) g.drawImage(cookieRun1,80,250, this);
 		else if(choice==1) { g.drawImage(cookieRun2,80,250, this); cookieY=250;}
@@ -72,7 +68,7 @@ public class RunningCookie extends JPanel implements Runnable{
 	@Override
 	public void run() {
 		
-		while(!MyFrame.gameDie) {
+		while(!GameClient.gameDie) {
 				if(coll==true) {  //장애물과 충돌했을 떄
 					choice=7;
 			 	}else if(slide==false&&jump==false&coll==false){  //그냥 달릴 때
@@ -116,7 +112,7 @@ public class RunningCookie extends JPanel implements Runnable{
 				} 	
 			}
 			repaint();
-			if(MyFrame.gameDie==true) break;
+			if(GameClient.gameDie==true) break;
 		}
 	}
 	public void setSlide(boolean slide) {
@@ -134,8 +130,4 @@ public class RunningCookie extends JPanel implements Runnable{
 	public void setColl(boolean coll) {
 		this.coll=coll;
 	}
-	
-		
-		
-	
 }

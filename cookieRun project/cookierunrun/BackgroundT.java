@@ -1,7 +1,5 @@
 package cookierunrun;
-//cookierunrun
-import java.awt.Color;
-import java.awt.Font;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -11,7 +9,6 @@ import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /*
@@ -79,8 +76,7 @@ class BackgroundT extends JPanel implements Runnable {
     @Override
     public void run() {
         play("C:\\cookierun\\music\\gameMusic.wav");
-        while (!MyFrame.gameDie) {
-
+        while (!GameClient.gameDie) {
             // 시간을 측정해서 25초 이후엔 자동으로 2라운드 진입
             endTime = System.currentTimeMillis();
             gamingTime = (int) (endTime - startTime) / 1000;
@@ -98,7 +94,7 @@ class BackgroundT extends JPanel implements Runnable {
                 Thread.sleep(3);
             } catch (InterruptedException e) {
             }
-            if (MyFrame.gameDie)
+            if (GameClient.gameDie)
                 break;
         }
         clip.stop();
@@ -122,4 +118,3 @@ class BackgroundT extends JPanel implements Runnable {
     }
 
 }
-
