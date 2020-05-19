@@ -24,6 +24,7 @@ public class EndGame extends JFrame implements ActionListener{
 	private  JLabel score;
 	private  JLabel gomScore;
 	private  JLabel coinScore;
+	private RoomDAO roomDAO;
 	
 	private  DecimalFormat df = new DecimalFormat("#,##0");
 	//패널 선언
@@ -32,9 +33,11 @@ public class EndGame extends JFrame implements ActionListener{
 	
 	public EndGame(LoginDTO loginDTO) {
 		this.loginDTO = loginDTO;
-		
 		this.setSize(700, 460);
 		this.setLayout(null);
+		
+		
+		//////////////
 		p = new JPanel();
 		end = new EndBack();
 		p.setOpaque(false);
@@ -91,6 +94,7 @@ public class EndGame extends JFrame implements ActionListener{
 		coinScore.setBounds(540,260,300,100);	
 		if(GameClient.rivalScore>Jelly.gameScore) {
 			coinScore.setText("0");
+			Jelly.coinEat=0;
 		} else {
 			coinScore.setText(df.format(Jelly.coinEat));
 		}
@@ -100,6 +104,11 @@ public class EndGame extends JFrame implements ActionListener{
 		p.add(coinScore);
 		p.add(gameScoreL);
 		p.add(yesBtn);
+		
+		//코인&update 실행
+		loginDTO.setCoin(loginDTO.getCoin()+Jelly.coinEat);
+		loginDTO.setScore((loginDTO.getScore()<Jelly.gameScore)?Jelly.gameScore:loginDTO.getScore());
+		
 		// 0517하린 추가
 		p.add(bubbleP);
 		end.add(p);
@@ -107,6 +116,10 @@ public class EndGame extends JFrame implements ActionListener{
 	}
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==yesBtn) {
+			roomDAO = new RoomDAO();
+			System.out.println(loginDTO.getCoin());
+			System.out.println(loginDTO.getScore());
+			roomDAO.updateCoin(loginDTO);
 			BackgroundT.round2=false;			
 			Jelly.gameScore=0;
 			Jelly.coinEat=0;

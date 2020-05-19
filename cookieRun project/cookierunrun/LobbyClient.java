@@ -75,30 +75,37 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 	private ArrayList<RoomDTO> roomAr = new ArrayList<RoomDTO>();
 	private RoomDTO roomDTO;
 	
+	//추가
+	private JLabel rank1;
+	private JLabel rank2;
+	private JLabel rank3;
 	
 	
 	int sleepSec = 3;	
+	int sleepSec2 = 5;
 
 	public LobbyClient(LoginDTO loginDTO) {
+		this.loginDTO = loginDTO;
 		
 		// 자동리스트 하기? test임 상의해보자 팀원들과	
+		
 		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
 		exec.scheduleAtFixedRate(new Runnable() {
 			public void run(){
 				try {
 					JoinList();
-					RoomList();
+					RoomList();	
+					rankList();
 				}catch (Exception e) { 
 				}			
 			}
 		},0,sleepSec, TimeUnit.SECONDS);
-
-
 		
-		this.loginDTO = loginDTO;
 		System.out.println("lobbyClient오자마자 닉네임" + loginDTO.getNickName());
 		play("C:\\cookierun\\music\\LobbyMusic.wav");
 		setLayout(null); // 프레임깨기
+		
+
 		// 버튼 만들기
 		// makeRoomBtn = new JButton(new ImageIcon("C:\\cookierun\\png\\방만들기.png"));
 		sendBtn = new JButton("보내기");
@@ -110,23 +117,30 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 		room5Btn  = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
 		room6Btn  = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
 		
-       // user1L = new JLabel("운영자");
-       // user1L.setBounds(220, 145, 60, 20);
-       // user1L.setOpaque(false);
-      //  getContentPane().add(user1L);    
+       user1L = new JLabel();
+       user1L.setBounds(220, 145, 60, 20);
+       user1L.setOpaque(false);
+      getContentPane().add(user1L);    
         
-      //  user2L = new JLabel("");
-      //  user2L.setBounds(350, 145, 60, 20);
-      //  getContentPane().add(user2L);
-    //    user2L.setOpaque(false);
+      user2L = new JLabel("");
+      user2L.setBounds(350, 145, 60, 20);
+      getContentPane().add(user2L);
+      user2L.setOpaque(false);
 /*
 		RoomDAO roomDAO = new RoomDAO();
 		roomAr = roomDAO.selectAllRoom();
 		System.out.println(roomAr.get(0).getRoomState());
-		*/
-		
-/*
 		if(roomAr.get(0).getRoomState()==1) {			
+			String user1 = roomAr.get(0).getUser1();
+			user1L = new JLabel(user1);
+			user1L.setBounds(220, 145, 60, 20);
+			user1L.setOpaque(false);
+			getContentPane().add(user1L);    
+			String user2 = roomAr.get(0).getUser2();   
+			user2L = new JLabel(user2);
+			user2L.setBounds(350, 145, 60, 20);
+			getContentPane().add(user2L);
+			user2L.setOpaque(false);
 			room1Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
 		}else if(roomAr.get(0).getRoomState()==2) {
 			String user1 = roomAr.get(0).getUser1();
@@ -152,7 +166,9 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 			getContentPane().add(user2L);
 			user2L.setOpaque(false);
 			room1Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\게임중.png"));
-		}
+		}*/
+		
+		/*
 		if(roomAr.get(1).getRoomState()==1) {
 			room2Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
 		}else if(roomAr.get(1).getRoomState()==2) {
@@ -162,7 +178,9 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 		}
 		if(roomAr.get(2).getRoomState()==1) {
 			room3Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
-		}else if(roomAr.get(2).getRoomState()==2) {
+		}else if(roomAr.get(2).getRoomState()==2) {+
+		
+		
 			room3Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\대기중.png"));
 		}else if(roomAr.get(2).getRoomState()==3) {
 			room3Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\게임중.png"));
@@ -286,6 +304,38 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 		myInfoPanel.add(myInfoScoreT);
 		myInfoPanel.add(myInfoCoinT);
 		add(myInfoPanel);
+		
+		//화면 좌측 상단 위 랭킹 올리기
+		JPanel rankLobby= new JPanel() {
+			public void paintComponent(Graphics g) {
+				Image image = Toolkit.getDefaultToolkit().getImage("C:\\cookierun\\png\\rankLobby.png");
+				g.drawImage(image, 5, 5, 80, 150, this);
+				setOpaque(false);
+				super.paintComponent(g);
+			}
+		};
+		rankLobby.setBounds(0,0,700,600);
+		rankLobby.setLayout(null);
+		
+		rank1 = new JLabel();
+		rank1.setBounds(80,7,100,50);
+		rank1.setFont(new Font("맑은 고딕",Font.BOLD,15));
+		rank1.setForeground(Color.white);
+		
+		rank2 = new JLabel();
+		rank2.setBounds(80,50,100,50);
+		rank2.setFont(new Font("맑은 고딕",Font.BOLD,15));
+		rank2.setForeground(Color.white);
+		
+		rank3 = new JLabel();
+		rank3.setBounds(80,95,100,50);
+		rank3.setFont(new Font("맑은 고딕",Font.BOLD,15));
+		rank3.setForeground(Color.white);
+		
+		rankLobby.add(rank1);
+		rankLobby.add(rank2);
+		rankLobby.add(rank3);
+		add(rankLobby);
 
 		// 위에 글씨 라벨
 		labelL.setBounds(80, -240, 700, 600);
@@ -347,6 +397,15 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 		});
 
 	}
+	
+	public void rankList() {
+		RoomDAO roomDAO = new RoomDAO();
+		ArrayList <LoginDTO> ar=roomDAO.tableDesc();
+		System.out.println("내림차순한 테이블의 첫번쨰 닉네임"+ar.get(1).getNickName());
+		rank1.setText(ar.get(0).getNickName());
+		rank2.setText(ar.get(1).getNickName());
+		rank3.setText(ar.get(2).getNickName());
+	}
 
 	public void JoinList() {
 		List<LoginDTO> list = registerDAO.getJoinList();
@@ -356,60 +415,35 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 		}
 	}
 	
-	
+
 	public void RoomList() {
-		RoomDAO roomDAO = new RoomDAO();
-		roomAr = roomDAO.selectAllRoom();
-		System.out.println("방 상태 새로고침 완료!!"+roomAr.get(0).getRoomState());
-		if(roomAr.get(0).getRoomState()==1) {			
-			room1Btn.setIcon(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
-		}else if(roomAr.get(0).getRoomState()==2) {
-			String user1 = roomAr.get(0).getUser1();
-			user1L = new JLabel(user1);
-			user1L.setBounds(220, 145, 60, 20);
-			user1L.setOpaque(false);
-			getContentPane().add(user1L);    
-			String user2 = roomAr.get(0).getUser2();   
-			user2L = new JLabel(user2);
-			user2L.setBounds(350, 145, 60, 20);
-			getContentPane().add(user2L);
-			user2L.setOpaque(false);
-			room1Btn.setIcon(new ImageIcon("C:\\cookierun\\png\\대기중.png"));			
-		}else if(roomAr.get(0).getRoomState()==3) {			
-			String user1 = roomAr.get(0).getUser1();
-			user1L = new JLabel(user1);
-			user1L.setBounds(220, 145, 60, 20);
-			user1L.setOpaque(false);
-			getContentPane().add(user1L);    
-			String user2 = roomAr.get(0).getUser2();   
-			user2L = new JLabel(user2);
-			user2L.setBounds(350, 145, 60, 20);
-			getContentPane().add(user2L);
-			user2L.setOpaque(false);
-			room1Btn.setIcon(new ImageIcon("C:\\cookierun\\png\\게임중.png"));
-		}
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	      RoomDAO roomDAO = new RoomDAO();
+	      roomAr = roomDAO.selectAllRoom();
+	      // System.out.println("방 상태 새로고침 완료!!"+roomAr.get(0).getRoomState());
+	      if (roomAr.get(0).getRoomState() == 1) {
+	         room1Btn.setIcon(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
+	      } else if (roomAr.get(0).getRoomState() == 2) {
+	         room1Btn.setIcon(new ImageIcon("C:\\cookierun\\png\\대기중.png"));
+	         String user1 = roomAr.get(0).getUser1();
+	         user1L.setText("");
+	         user1L.setText(user1);
+	         
+	         String user2 = roomAr.get(0).getUser2();
+	         user2L.setText(user2);
+	      } else if (roomAr.get(0).getRoomState() == 3) {
+	         room1Btn.setIcon(new ImageIcon("C:\\cookierun\\png\\게임중.png"));
+	         String user1 = roomAr.get(0).getUser1();
+	         user1L.setText(user1);
+	         String user2 = roomAr.get(0).getUser2();
+	         user2L.setText(user2);
+	      }
+	   }
 	
 	
 	public void service() {
 		// 서버는 누구인지 모른다 그래서 ip를 입력해주는것이다.
-		//String serverIP = "192.168.0.159"; // 이렇게 적으면 바로 서버로 들어간다 IP안치고
-		//String serverIP = "192.168.147.4";
-		String serverIP = "192.168.0.153";
+		String serverIP = "192.168.0.159"; // 이렇게 적으면 바로 서버로 들어간다 IP안치고
+//String serverIP = "192.168.0.8";
 		if (serverIP == null || serverIP.length() == 0) {
 			System.out.println("서버IP가 입력되지 않았습니다.");
 			System.exit(0);
@@ -498,6 +532,7 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 	               roomDAO.updateUser2(loginDTO.getNickName(),roomNum);   
 	               //new RoomClient(loginDTO,roomDTO,clip).service();
 	               new RoomClient(loginDTO,clip).service();
+	               dispose();
 	            
 	            }else if(roomAr.get(0).getSecretRoom()==1) {	               
 	               String pwInput = JOptionPane.showInputDialog("비밀번호를 입력하시오");
@@ -505,6 +540,7 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 	                  roomDAO.updateUser2(loginDTO.getNickName(),roomNum);
 	                 // new RoomClient(loginDTO,roomDTO,clip).service();
 	                  new RoomClient(loginDTO,clip).service();
+	                  dispose();
 	               }else {
 	                  JOptionPane.showMessageDialog(this, "비밀번호가 틀렸습니다.");
 	               }
@@ -545,6 +581,7 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 			clip.stop();
 			clip.open(ais);
 			clip.start();
+			clip.loop(-1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

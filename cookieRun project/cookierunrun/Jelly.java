@@ -48,7 +48,6 @@ public class Jelly extends JPanel implements Runnable {
                 }
             }
         } catch (Exception e) {
-        	e.printStackTrace();
         }
         
         // 젤리 위를 지나가면 젤리가 사라지게 만들기

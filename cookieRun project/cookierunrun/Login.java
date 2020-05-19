@@ -130,6 +130,7 @@ public class Login extends JFrame implements ActionListener {
 				clip = AudioSystem.getClip();
 				clip.open(stream);
 				clip.start();
+				clip.loop(-1);
 			} catch (LineUnavailableException e1) {
 				e1.printStackTrace();
 			}

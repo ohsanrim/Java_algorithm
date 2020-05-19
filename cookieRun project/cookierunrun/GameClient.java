@@ -119,9 +119,8 @@ class GameClient extends JFrame implements KeyListener, Runnable {
 	// 클라이언트 서비스
 	public void service() {
 		//String serverIP = "192.168.0.153";
-		//String serverIP = "172.30.1.28";
-		//String serverIP = "192.168.147.4";
-		String serverIP = "192.168.0.153";
+		//String serverIP = "192.168.0.8";
+		String serverIP = "192.168.0.159";
 		if (serverIP == null || serverIP.length() == 0) {
 			System.out.println("서버IP가 입력되지 않았습니다.");
 			System.exit(0);

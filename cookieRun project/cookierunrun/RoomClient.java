@@ -57,11 +57,15 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 	// 레디 여부
 	public boolean meReady = false;
 	public boolean rivalReady = false;
+	private RoomDAO roomDAO;
+	private RoomDTO roomDTO;
 	
 	public RoomClient(LoginDTO loginDTO, Clip clip) {
 		super("대기화면");
+		roomDAO = new RoomDAO();
 		this.clip = clip;
 		this.loginDTO = loginDTO;		
+		roomDTO = new RoomDTO();
 		nickName = loginDTO.getNickName();
 				
 		Image img = new ImageIcon().getImage();
@@ -187,9 +191,9 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 		});
 	}
 	public void service() {		
-		//String serverIP = "192.168.0.159"; // 이렇게 적으면 바로 서버로 들어간다 IP안치고
-		//String serverIP = "192.168.0.153";	
-		String serverIP = "192.168.0.153";
+		String serverIP = "192.168.0.159"; // 이렇게 적으면 바로 서버로 들어간다 IP안치고
+		//String serverIP = "192.168.0.153";
+		//String serverIP = "192.168.0.8";
 		if (serverIP == null || serverIP.length() == 0) {
 			System.out.println("서버IP가 입력되지 않았습니다.");
 			System.exit(0);
@@ -304,13 +308,14 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 					reader.close(); // 읽기 끊기
 					writer.close(); // 쓰기 끊기
 					socket.close(); // 소켓 끊기
+					clip.close();
 					for(String data : joinUser) {
 						if(data.equals(nickName)) {
 							joinUser.remove(data);
 							break;
 						}
 					}
-					if (!gameStart) {  
+					if (!gameStart) {    
 						new LobbyClient(loginDTO).service();
 					}
 					gameStart=false;
@@ -339,6 +344,11 @@ public class RoomClient extends JFrame implements ActionListener, Runnable {
 				writer.flush();
 			}
 		} else if (e.getSource() == outBtn) {
+			System.out.println("아웃버튼 눌렀을때이다");
+			System.out.println("outUser1로넘기는 유저1 " + user1.getText());
+			System.out.println("outUser1로넘기는 유저2 " + user2.getText());
+			System.out.println("outUser1로넘기는 번호 " + roomDTO.getRoomName());
+			roomDAO.outUser1(user1.getText(),user2.getText(), 1);
 			writer.println("exit");
 			writer.flush();
 		}
