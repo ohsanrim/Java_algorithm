@@ -30,9 +30,11 @@ public class EndGame extends JFrame implements ActionListener{
 	//패널 선언
 	private  JPanel p;
 	private  EndBack end;
+	private int roomNum;
 	
-	public EndGame(LoginDTO loginDTO) {
+	public EndGame(LoginDTO loginDTO, int roomNum) {
 		this.loginDTO = loginDTO;
+		this.roomNum = roomNum;
 		this.setSize(700, 460);
 		this.setLayout(null);
 		
@@ -55,7 +57,7 @@ public class EndGame extends JFrame implements ActionListener{
 		        Toolkit t = Toolkit.getDefaultToolkit();
 				win = t.getImage("C:\\cookierun\\png\\Win.png");
 				lose = t.getImage("C:\\cookierun\\png\\Lose.png");
-				if(GameClient.rivalScore>Jelly.gameScore) {
+				if(Game1Client.rivalScore>Jelly.gameScore) {
 					g.drawImage(lose,0,0,this.getWidth(),this.getHeight(),this);
 				} else {
 					g.drawImage(win,0,0,this.getWidth(),this.getHeight(),this);
@@ -92,7 +94,7 @@ public class EndGame extends JFrame implements ActionListener{
 		coinScore.setFont(new Font("Segoe UI Black",Font.BOLD,30));
 		coinScore.setForeground(Color.gray);
 		coinScore.setBounds(540,260,300,100);	
-		if(GameClient.rivalScore>Jelly.gameScore) {
+		if(Game1Client.rivalScore>Jelly.gameScore) {
 			coinScore.setText("0");
 			Jelly.coinEat=0;
 		} else {
@@ -124,12 +126,15 @@ public class EndGame extends JFrame implements ActionListener{
 			Jelly.gameScore=0;
 			Jelly.coinEat=0;
 			Jelly.gameScore=0;
-			GameClient.gameDie=false;
+			Game1Client.gameDie=false;
 			MovingHurdle.health=100;
-			GameClient.rivalGameDie=false;
-			GameClient.competitionScore="0";
+			Game1Client.rivalGameDie=false;
+			Game1Client.competitionScore="0";
+			roomDAO.updateEmptyRoom(roomNum);
+			//new LobbyClient(loginDTO).service();
+			//this.setVisible(false);
+			this.dispose();
 			new LobbyClient(loginDTO).service();
-			this.setVisible(false);
 		}
 	}
 }

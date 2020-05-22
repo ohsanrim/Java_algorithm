@@ -21,6 +21,7 @@ import java.io.PrintWriter;
 
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -74,150 +75,89 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 	private int roomNum;
 	private ArrayList<RoomDTO> roomAr = new ArrayList<RoomDTO>();
 	private RoomDTO roomDTO;
-	
-	//추가
+	private DecimalFormat df = new DecimalFormat("#,##0");
 	private JLabel rank1;
 	private JLabel rank2;
 	private JLabel rank3;
-	
-	
-	int sleepSec = 3;	
-	int sleepSec2 = 5;
+
+	int sleepSec = 1;
 
 	public LobbyClient(LoginDTO loginDTO) {
 		this.loginDTO = loginDTO;
-		
-		// 자동리스트 하기? test임 상의해보자 팀원들과	
-		
-		ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
-		exec.scheduleAtFixedRate(new Runnable() {
-			public void run(){
+
+		// 자동리스트 하기? test임 상의해보자 팀원들과
+		ScheduledThreadPoolExecutor stpe = new ScheduledThreadPoolExecutor(1);
+		stpe.scheduleAtFixedRate(new Runnable() {
+			public void run() {
 				try {
-					JoinList();
-					RoomList();	
+					JoinList(); // 설정한 시간마다 실행시킬 메소드 이다
+					RoomList();
 					rankList();
-				}catch (Exception e) { 
-				}			
+				} catch (Exception e) {
+				}
 			}
-		},0,sleepSec, TimeUnit.SECONDS);
-		
-		System.out.println("lobbyClient오자마자 닉네임" + loginDTO.getNickName());
+		}, 0, sleepSec, TimeUnit.SECONDS);
 		play("C:\\cookierun\\music\\LobbyMusic.wav");
 		setLayout(null); // 프레임깨기
-		
-
 		// 버튼 만들기
 		// makeRoomBtn = new JButton(new ImageIcon("C:\\cookierun\\png\\방만들기.png"));
 		sendBtn = new JButton("보내기");
 		exitBtn = new JButton("나가기");
-		room1Btn  = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
-		room2Btn  = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
-		room3Btn  = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
-		room4Btn  = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
-		room5Btn  = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
-		room6Btn  = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
+		room1Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
+		room2Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
+		room3Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
+		room4Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
+		room5Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
+		room6Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
+
+		user1L = new JLabel("");
+		user1L.setBounds(220, 145, 60, 20);
+		user1L.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		getContentPane().add(user1L);
+		user1L.setOpaque(false);
+
+		user2L = new JLabel("");
+		user2L.setBounds(350, 145, 60, 20);
+		user2L.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		getContentPane().add(user2L);
+		user2L.setOpaque(false);
+
+		user3L = new JLabel("");
+		user3L.setBounds(450, 145, 60, 20);
+		user3L.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		getContentPane().add(user3L);
+		user3L.setOpaque(false);
+
+		user4L = new JLabel("");
+		user4L.setBounds(580, 145, 60, 20);
+		user4L.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		getContentPane().add(user4L);
+		user4L.setOpaque(false);
 		
-       user1L = new JLabel();
-       user1L.setBounds(220, 145, 60, 20);
-       user1L.setOpaque(false);
-      getContentPane().add(user1L);    
-        
-      user2L = new JLabel("");
-      user2L.setBounds(350, 145, 60, 20);
-      getContentPane().add(user2L);
-      user2L.setOpaque(false);
-/*
-		RoomDAO roomDAO = new RoomDAO();
-		roomAr = roomDAO.selectAllRoom();
-		System.out.println(roomAr.get(0).getRoomState());
-		if(roomAr.get(0).getRoomState()==1) {			
-			String user1 = roomAr.get(0).getUser1();
-			user1L = new JLabel(user1);
-			user1L.setBounds(220, 145, 60, 20);
-			user1L.setOpaque(false);
-			getContentPane().add(user1L);    
-			String user2 = roomAr.get(0).getUser2();   
-			user2L = new JLabel(user2);
-			user2L.setBounds(350, 145, 60, 20);
-			getContentPane().add(user2L);
-			user2L.setOpaque(false);
-			room1Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
-		}else if(roomAr.get(0).getRoomState()==2) {
-			String user1 = roomAr.get(0).getUser1();
-			user1L = new JLabel(user1);
-			user1L.setBounds(220, 145, 60, 20);
-			user1L.setOpaque(false);
-			getContentPane().add(user1L);    
-			String user2 = roomAr.get(0).getUser2();   
-			user2L = new JLabel(user2);
-			user2L.setBounds(350, 145, 60, 20);
-			getContentPane().add(user2L);
-			user2L.setOpaque(false);
-			room1Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\대기중.png"));			
-		}else if(roomAr.get(0).getRoomState()==3) {			
-			String user1 = roomAr.get(0).getUser1();
-			user1L = new JLabel(user1);
-			user1L.setBounds(220, 145, 60, 20);
-			user1L.setOpaque(false);
-			getContentPane().add(user1L);    
-			String user2 = roomAr.get(0).getUser2();   
-			user2L = new JLabel(user2);
-			user2L.setBounds(350, 145, 60, 20);
-			getContentPane().add(user2L);
-			user2L.setOpaque(false);
-			room1Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\게임중.png"));
-		}*/
-		
-		/*
-		if(roomAr.get(1).getRoomState()==1) {
-			room2Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
-		}else if(roomAr.get(1).getRoomState()==2) {
-			room2Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\대기중.png"));
-		}else if(roomAr.get(1).getRoomState()==3) {
-			room2Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\게임중.png"));
-		}
-		if(roomAr.get(2).getRoomState()==1) {
-			room3Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
-		}else if(roomAr.get(2).getRoomState()==2) {+
-		
-		
-			room3Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\대기중.png"));
-		}else if(roomAr.get(2).getRoomState()==3) {
-			room3Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\게임중.png"));
-		}
-		if(roomAr.get(3).getRoomState()==1) {
-			room4Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
-		}else if(roomAr.get(3).getRoomState()==2) {
-			room4Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\대기중.png"));
-		}else if(roomAr.get(3).getRoomState()==3) {
-			room4Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\게임중.png"));
-		}
-		if(roomAr.get(4).getRoomState()==1) {
-			room5Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
-		}else if(roomAr.get(4).getRoomState()==2) {
-			room5Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\대기중.png"));
-		}else if(roomAr.get(4).getRoomState()==3) {
-			room5Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\게임중.png"));
-		}
-		if(roomAr.get(5).getRoomState()==1) {
-			room6Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
-		}else if(roomAr.get(5).getRoomState()==2) {
-			room6Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\대기중.png"));
-		}else if(roomAr.get(5).getRoomState()==3) {
-			room6Btn = new JButton(new ImageIcon("C:\\cookierun\\png\\게임중.png"));
-		}
-*/
+		user9L = new JLabel("");
+		user9L.setBounds(220, 305, 60, 20);
+		user9L.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		getContentPane().add(user9L);
+		user9L.setOpaque(false);
+
+		user10L = new JLabel("");
+		user10L.setBounds(350, 305, 60, 20);
+		user10L.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+		getContentPane().add(user10L);
+		user10L.setOpaque(false);
+
 		rosterA = new JTextArea("");
 		rosterL = new JLabel(new ImageIcon("C:\\cookierun\\png\\접속자목록.png"));
 		chatA = new JTextArea();
 		chatT = new JTextField();
 		labelL = new JLabel(new ImageIcon("C:\\cookierun\\png\\쿠키런이름2.PNG"));
 		backGroundL = new JLabel(new ImageIcon("C:\\cookierun\\png\\배경화면.jpg"));
-
 		// 방만들기 버튼
 		// makeRoomBtn.setBounds(20, 100, 150, 40);
 		// 프레임에 붙히기
 		// add(makeRoomBtn);
+		add(rosterL);
+		rosterL.setBounds(20, 285, 150, 254);
 		// 대기방 만들기 6개
 		room1Btn.setOpaque(false);
 		room2Btn.setOpaque(false);
@@ -262,15 +202,15 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 		panel.add(sendBtn);
 		getContentPane().add(panel);
 		// 접속자 화면 관련
-		newListBtn = new JButton("새로고침");
+		// newListBtn = new JButton("새로고침");
 		list = new JList<LoginDTO>(new DefaultListModel<LoginDTO>());
 		model = (DefaultListModel<LoginDTO>) list.getModel();
 		this.scroll2 = new JScrollPane(list);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		add(scroll2);
-		add(newListBtn);
-		scroll2.setBounds(20, 285, 150, 254);
-		newListBtn.setBounds(20, 542, 90, 25);
+		// add(newListBtn);
+		scroll2.setBounds(30, 315, 120, 180);
+		// newListBtn.setBounds(20, 542, 90, 25);
 		// 내 상태창 정보
 		JPanel myInfoPanel = new JPanel() {
 			public void paintComponent(Graphics g) {
@@ -286,8 +226,8 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 		myInfoScoreL = new JLabel("내점수: ");
 		myInfoCoinL = new JLabel("내코인: ");
 		myInfoNameT = new JLabel(loginDTO.getNickName() + "");
-		myInfoScoreT = new JLabel(loginDTO.getScore() + "점");
-		myInfoCoinT = new JLabel(loginDTO.getCoin() + "coin");
+		myInfoScoreT = new JLabel(df.format(loginDTO.getScore()) + "점");
+		myInfoCoinT = new JLabel(df.format(loginDTO.getCoin()) + "coin");
 
 		myInfoNameL.setBounds(8, 20, 50, 30);
 		myInfoScoreL.setBounds(8, 40, 50, 30);
@@ -304,9 +244,8 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 		myInfoPanel.add(myInfoScoreT);
 		myInfoPanel.add(myInfoCoinT);
 		add(myInfoPanel);
-		
-		//화면 좌측 상단 위 랭킹 올리기
-		JPanel rankLobby= new JPanel() {
+		// 랭킹 관련
+		JPanel rankLobby = new JPanel() {
 			public void paintComponent(Graphics g) {
 				Image image = Toolkit.getDefaultToolkit().getImage("C:\\cookierun\\png\\rankLobby.png");
 				g.drawImage(image, 5, 5, 80, 150, this);
@@ -314,33 +253,31 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 				super.paintComponent(g);
 			}
 		};
-		rankLobby.setBounds(0,0,700,600);
+		rankLobby.setBounds(0, 0, 700, 600);
 		rankLobby.setLayout(null);
-		
+
 		rank1 = new JLabel();
-		rank1.setBounds(80,7,100,50);
-		rank1.setFont(new Font("맑은 고딕",Font.BOLD,15));
+		rank1.setBounds(80, 7, 100, 50);
+		rank1.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		rank1.setForeground(Color.white);
-		
+
 		rank2 = new JLabel();
-		rank2.setBounds(80,50,100,50);
-		rank2.setFont(new Font("맑은 고딕",Font.BOLD,15));
+		rank2.setBounds(80, 50, 100, 50);
+		rank2.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		rank2.setForeground(Color.white);
-		
+
 		rank3 = new JLabel();
-		rank3.setBounds(80,95,100,50);
-		rank3.setFont(new Font("맑은 고딕",Font.BOLD,15));
+		rank3.setBounds(80, 95, 100, 50);
+		rank3.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		rank3.setForeground(Color.white);
-		
+
 		rankLobby.add(rank1);
 		rankLobby.add(rank2);
 		rankLobby.add(rank3);
 		add(rankLobby);
-
 		// 위에 글씨 라벨
 		labelL.setBounds(80, -240, 700, 600);
 		add(labelL);
-
 		// gif파일 넣기
 		JPanel panel_gif1 = new JPanel() {
 			public void paintComponent(Graphics g) {
@@ -378,7 +315,7 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 		room4Btn.addActionListener(this);
 		room5Btn.addActionListener(this);
 		room6Btn.addActionListener(this);
-		newListBtn.addActionListener(this);
+		// newListBtn.addActionListener(this);
 		exitBtn.addActionListener(this);
 
 		this.addWindowListener(null);
@@ -395,13 +332,11 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 				writer.flush();
 			}
 		});
-
 	}
-	
+
 	public void rankList() {
 		RoomDAO roomDAO = new RoomDAO();
-		ArrayList <LoginDTO> ar=roomDAO.tableDesc();
-		System.out.println("내림차순한 테이블의 첫번쨰 닉네임"+ar.get(1).getNickName());
+		ArrayList<LoginDTO> ar = roomDAO.tableDesc();
 		rank1.setText(ar.get(0).getNickName());
 		rank2.setText(ar.get(1).getNickName());
 		rank3.setText(ar.get(2).getNickName());
@@ -414,20 +349,20 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 			model.addElement(dto);
 		}
 	}
-	
 
 	public void RoomList() {
 	      RoomDAO roomDAO = new RoomDAO();
 	      roomAr = roomDAO.selectAllRoom();
-	      // System.out.println("방 상태 새로고침 완료!!"+roomAr.get(0).getRoomState());
+	      // 1번방
 	      if (roomAr.get(0).getRoomState() == 1) {
 	         room1Btn.setIcon(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
+	         //user1L.setText(roomDAO.selectAllRoom().get(0).getUser1());
+	         user1L.setText("");
+	         user2L.setText("");
 	      } else if (roomAr.get(0).getRoomState() == 2) {
 	         room1Btn.setIcon(new ImageIcon("C:\\cookierun\\png\\대기중.png"));
 	         String user1 = roomAr.get(0).getUser1();
-	         user1L.setText("");
 	         user1L.setText(user1);
-	         
 	         String user2 = roomAr.get(0).getUser2();
 	         user2L.setText(user2);
 	      } else if (roomAr.get(0).getRoomState() == 3) {
@@ -437,23 +372,59 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 	         String user2 = roomAr.get(0).getUser2();
 	         user2L.setText(user2);
 	      }
+	      
+	      // 2번방
+	      if (roomAr.get(1).getRoomState() == 1) {
+	         room2Btn.setIcon(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
+	         user3L.setText("");
+	         user4L.setText("");
+	      } else if (roomAr.get(1).getRoomState() == 2) {
+	         room2Btn.setIcon(new ImageIcon("C:\\cookierun\\png\\대기중.png"));
+	         String user3 = roomAr.get(1).getUser1();
+	         user3L.setText(user3);
+	         String user4 = roomAr.get(1).getUser2();
+	         user4L.setText(user4);
+	      } else if (roomAr.get(1).getRoomState() == 3) {
+	         room2Btn.setIcon(new ImageIcon("C:\\cookierun\\png\\게임중.png"));
+	         String user3 = roomAr.get(1).getUser1();
+	         user3L.setText(user3);
+	         String user4 = roomAr.get(1).getUser2();
+	         user4L.setText(user4);
+	      }
+	      
+	      // 5번방
+	      if (roomAr.get(4).getRoomState() == 1) {
+	         room5Btn.setIcon(new ImageIcon("C:\\cookierun\\png\\빈방.png"));
+	         user9L.setText("");
+	         user10L.setText("");
+	      } else if (roomAr.get(4).getRoomState() == 2) {
+	         room5Btn.setIcon(new ImageIcon("C:\\cookierun\\png\\대기중.png"));
+	         String user9 = roomAr.get(4).getUser1();
+	         user9L.setText(user9);
+	         String user10 = roomAr.get(4).getUser2();
+	         user10L.setText(user10);
+	      } else if (roomAr.get(4).getRoomState() == 3) {
+	         room5Btn.setIcon(new ImageIcon("C:\\cookierun\\png\\게임중.png"));
+	         String user9 = roomAr.get(4).getUser1();
+	         user9L.setText(user9);
+	         String user10 = roomAr.get(4).getUser2();
+	         user10L.setText(user10);
+	      }
 	   }
-	
-	
+
 	public void service() {
 		// 서버는 누구인지 모른다 그래서 ip를 입력해주는것이다.
 		String serverIP = "192.168.0.159"; // 이렇게 적으면 바로 서버로 들어간다 IP안치고
-//String serverIP = "192.168.0.8";
+		//String serverIP = "192.168.147.4";
 		if (serverIP == null || serverIP.length() == 0) {
 			System.out.println("서버IP가 입력되지 않았습니다.");
 			System.exit(0);
 		}
-
 		// 닉네임
 		String nickName = loginDTO.getNickName();
 		try {
 			// 소켓생성
-			socket = new Socket(serverIP, 7777); // 아이피는 위에있는거고 port 는 고정? 꼭 9500써야하나
+			socket = new Socket(serverIP, 1000); // 아이피는 위에있는거고 port 는 고정? 꼭 9500써야하나
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
 		} catch (UnknownHostException e) {
@@ -465,7 +436,6 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 			e.printStackTrace();
 			System.exit(0);
 		}
-
 		// 서버로 닉네임 보내기
 		writer.println(nickName); // ln 이라는거 자체가 \n있는거니깐 이렇게 쓰는게 좋다.
 		writer.flush(); // 버퍼안에 찌꺼기 없애기
@@ -476,8 +446,8 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 		// 이벤트 처리
 		sendBtn.addActionListener(this); // 이거는 샌드버튼 눌렀을때 한다
 		chatT.addActionListener(this); // 타자를 치고 엔터를 쳤을때 나타낸다
-
 	} // service생성자
+
 	@Override
 	public void run() {
 		String line;
@@ -499,66 +469,94 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 				// 스크롤바를 항상 아래로 넣기
 				int pos = chatA.getText().length();
 				chatA.setCaretPosition(pos);
-
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-//		|| e.getSource() == Room2Btn || e.getSource() == Room3Btn
-//				|| e.getSource() == Room4Btn || e.getSource() == Room5Btn || e.getSource() == Room6Btn
 		RoomDAO roomDAO = new RoomDAO();
 		roomAr = roomDAO.selectAllRoom();
-		/*
-		if(e.getSource() == room1Btn) {
-			roomNum=1;
-			if(roomAr.get(0).getUserCount()==0) {
+		if (e.getSource() == room1Btn) {
+			roomNum = 1;
+			if (roomAr.get(0).getUserCount() == 0) {
 				new MakeRoom(this, loginDTO, clip, roomNum);
-			}else if(roomAr.get(0).getUserCount()==1) {
-				roomDAO.updateUser2(loginDTO.getNickName(),roomNum);
-			}else if(roomAr.get(0).getUserCount()==2) {
+			} else if (roomAr.get(0).getUserCount() == 1) {
+				if (roomAr.get(0).getSecretRoom() == 0) {
+					roomDAO.updateUser2(loginDTO.getNickName(), roomNum);
+					new Room1Client(loginDTO, clip, roomNum).service();
+					dispose();
+				} else if (roomAr.get(0).getSecretRoom() == 1) {
+					String pwInput = JOptionPane.showInputDialog("비밀번호를 입력하시오");
+					if (roomAr.get(0).getRoomPw().equals(pwInput)) {
+						roomDAO.updateUser2(loginDTO.getNickName(), roomNum);
+						new Room1Client(loginDTO, clip, roomNum).service();
+						dispose();
+					} else {
+						JOptionPane.showMessageDialog(this, "비밀번호가 틀렸습니다.");
+					}
+				}
+			} else if (roomAr.get(0).getUserCount() == 2) {
 				JOptionPane.showMessageDialog(this, "인원이 꽉 찼습니다.");
 			}
-			*/
-		
-		if(e.getSource() == room1Btn ) {
-	         roomNum=1;
-	         if(roomAr.get(0).getUserCount()==0) {
-	            new MakeRoom(this, loginDTO, clip, roomNum);
-	         }else if(roomAr.get(0).getUserCount()==1) {	            
-	            if(roomAr.get(0).getSecretRoom()==0) {
-	               roomDAO.updateUser2(loginDTO.getNickName(),roomNum);   
-	               //new RoomClient(loginDTO,roomDTO,clip).service();
-	               new RoomClient(loginDTO,clip).service();
-	               dispose();
-	            
-	            }else if(roomAr.get(0).getSecretRoom()==1) {	               
-	               String pwInput = JOptionPane.showInputDialog("비밀번호를 입력하시오");
-	               if(roomAr.get(0).getRoomPw().equals(pwInput)) {
-	                  roomDAO.updateUser2(loginDTO.getNickName(),roomNum);
-	                 // new RoomClient(loginDTO,roomDTO,clip).service();
-	                  new RoomClient(loginDTO,clip).service();
-	                  dispose();
-	               }else {
-	                  JOptionPane.showMessageDialog(this, "비밀번호가 틀렸습니다.");
-	               }
-	            }
-	         }else if(roomAr.get(0).getUserCount()==2) {
-	            JOptionPane.showMessageDialog(this, "인원이 꽉 찼습니다.");
-	         }
-	         
-	         
-	      
-			
-		} else if (e.getSource() == newListBtn) {
-			List<LoginDTO> list = registerDAO.getJoinList();
-			model.removeAllElements();
-			for (LoginDTO dto : list) {
-				model.addElement(dto);
+		}
+		// 2번방
+		if (e.getSource() == room2Btn) {
+			roomNum = 2;
+			if (roomAr.get(1).getUserCount() == 0) {
+				new MakeRoom(this, loginDTO, clip, roomNum);
+			} else if (roomAr.get(1).getUserCount() == 1) {
+				if (roomAr.get(1).getSecretRoom() == 0) {
+					roomDAO.updateUser2(loginDTO.getNickName(), roomNum);
+					new Room2Client(loginDTO, clip, roomNum).service();
+					dispose();
+				} else if (roomAr.get(1).getSecretRoom() == 1) {
+					String pwInput = JOptionPane.showInputDialog("비밀번호를 입력하시오");
+					if (roomAr.get(1).getRoomPw().equals(pwInput)) {
+						roomDAO.updateUser2(loginDTO.getNickName(), roomNum);
+						new Room2Client(loginDTO, clip, roomNum).service();
+						dispose();
+					} else {
+						JOptionPane.showMessageDialog(this, "비밀번호가 틀렸습니다.");
+					}
+				}
+			} else if (roomAr.get(1).getUserCount() == 2) {
+				JOptionPane.showMessageDialog(this, "인원이 꽉 찼습니다.");
 			}
-		} else if (e.getSource() == exitBtn) {
+		}
+		// 5번방
+		if (e.getSource() == room5Btn) {
+			roomNum = 5;
+			if (roomAr.get(4).getUserCount() == 0) {
+				new MakeRoom(this, loginDTO, clip, roomNum);
+			} else if (roomAr.get(4).getUserCount() == 1) {
+				if (roomAr.get(4).getSecretRoom() == 0) {
+					roomDAO.updateUser2(loginDTO.getNickName(), roomNum);
+					new Room5Client(loginDTO, clip, roomNum).service();
+					dispose();
+				} else if (roomAr.get(4).getSecretRoom() == 1) {
+					String pwInput = JOptionPane.showInputDialog("비밀번호를 입력하시오");
+					if (roomAr.get(4).getRoomPw().equals(pwInput)) {
+						roomDAO.updateUser2(loginDTO.getNickName(), roomNum);
+						new Room5Client(loginDTO, clip, roomNum).service();
+						dispose();
+					} else {
+						JOptionPane.showMessageDialog(this, "비밀번호가 틀렸습니다.");
+					}
+				}
+			} else if (roomAr.get(4).getUserCount() == 2) {
+				JOptionPane.showMessageDialog(this, "인원이 꽉 찼습니다.");
+			}
+		}		
+		
+		/*
+		 * else if (e.getSource() == newListBtn) { List<LoginDTO> list =
+		 * registerDAO.getJoinList(); model.removeAllElements(); for (LoginDTO dto :
+		 * list) { model.addElement(dto); } }
+		 */
+		else if (e.getSource() == exitBtn) {
 			registerDAO.deleteJoinList(loginDTO.getId());
 			writer.println("exit");
 			writer.flush();
@@ -574,6 +572,7 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 		writer.flush(); // 버퍼안에 남아있는 찌꺼기 들을 비워준다.
 		chatT.setText("");
 	}
+
 	public void play(String fileName) {
 		try {
 			ais = AudioSystem.getAudioInputStream(new File(fileName));
@@ -588,8 +587,8 @@ class LobbyClient extends JFrame implements ActionListener, Runnable {
 	}
 }
 
+// ----------------------방 만드는 프레임창----------------------
 class MakeRoom extends JFrame implements ActionListener {
-
 	private JButton createBtn, cancelBtn;
 	private JLabel roomNameL, pwL, peopleL;
 	private JTextField roomNameT, pwT;
@@ -599,16 +598,15 @@ class MakeRoom extends JFrame implements ActionListener {
 	private LoginDTO loginDTO;
 	private PrintWriter writer;
 	private int roomNum;
-	
+
 	private RoomDTO roomDTO;
 	private RoomDAO roomDAO;
-	
 
-	public MakeRoom(LobbyClient lobbyClient, LoginDTO loginDTO, Clip clip,int roomNum) {
+	public MakeRoom(LobbyClient lobbyClient, LoginDTO loginDTO, Clip clip, int roomNum) {
 		this.lobbyClient = lobbyClient;
 		this.clip = clip;
 		this.loginDTO = loginDTO;
-		this.roomNum=roomNum;
+		this.roomNum = roomNum;
 
 		setContentPane(new MyPanel());
 		// 확인 버튼
@@ -671,8 +669,8 @@ class MakeRoom extends JFrame implements ActionListener {
 		createBtn.addActionListener(this); // 생성 버튼 이벤트
 		cancelBtn.addActionListener(this); // 취소 버튼 이벤트
 		pwCheckBox.addActionListener(this); // 체크박스 이벤트
-
 	}// 생성자
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == createBtn) {
@@ -688,34 +686,74 @@ class MakeRoom extends JFrame implements ActionListener {
 				if (result == JOptionPane.OK_OPTION)
 					return;
 			}
-			 if(roomNum==1){
+			if (roomNum == 1) {
 				RoomDTO roomDTO = new RoomDTO();
-				System.out.println(roomNum);
 				roomDTO.setRoomNumber(1);
 				roomDTO.setRoomName(roomNameT.getText());
-				if(pwT.getText()==null||pwT.getText().equals("")) {
+				if (pwT.getText() == null || pwT.getText().equals("")) {
 					roomDTO.setSecretRoom(0);
-					
-				}else{
+				} else {
 					roomDTO.setSecretRoom(1);
 					roomDTO.setRoomPw(pwT.getText());
 				}
 				roomDTO.setUser1(loginDTO.getNickName());
 				roomDTO.setUserCount(1);
-				roomDTO.setRoomState(2);			 
-			 
-				System.out.println("roomClient넘기기전에 닉네임 " + loginDTO.getNickName());
+				roomDTO.setRoomState(2);
 				roomDAO.updateRoomInf(roomDTO);
 				this.dispose();
 				lobbyClient.dispose();
-				new RoomClient(loginDTO, clip).service();
+				new Room1Client(loginDTO, clip, roomNum).service();
 				// 방만들때 로비 서버에 exit 를 보내서 통신을 끊는다.
 				// writer.println("exit");
 				// writer.flush();
 			}
-			setVisible(false); // MakeRoom의 프레임을 끄기
+			if (roomNum == 2) {
+				RoomDTO roomDTO = new RoomDTO();
+				roomDTO.setRoomNumber(2);
+				roomDTO.setRoomName(roomNameT.getText());
+				if (pwT.getText() == null || pwT.getText().equals("")) {
+					roomDTO.setSecretRoom(0);
+				} else {
+					roomDTO.setSecretRoom(1);
+					roomDTO.setRoomPw(pwT.getText());
+				}
+				roomDTO.setUser1(loginDTO.getNickName());
+				roomDTO.setUserCount(1);
+				roomDTO.setRoomState(2);
+				roomDAO.updateRoomInf(roomDTO);
+				this.dispose();
+				lobbyClient.dispose();
+				new Room2Client(loginDTO, clip, roomNum).service();
+				// 방만들때 로비 서버에 exit 를 보내서 통신을 끊는다.
+				// writer.println("exit");
+				// writer.flush();
+			}
+			if (roomNum == 5) {
+				RoomDTO roomDTO = new RoomDTO();
+				roomDTO.setRoomNumber(5);
+				roomDTO.setRoomName(roomNameT.getText());
+				if (pwT.getText() == null || pwT.getText().equals("")) {
+					roomDTO.setSecretRoom(0);
+				} else {
+					roomDTO.setSecretRoom(1);
+					roomDTO.setRoomPw(pwT.getText());
+				}
+				roomDTO.setUser1(loginDTO.getNickName());
+				roomDTO.setUserCount(1);
+				roomDTO.setRoomState(2);
+				roomDAO.updateRoomInf(roomDTO);
+				this.dispose();
+				lobbyClient.dispose();
+				new Room5Client(loginDTO, clip, roomNum).service();
+				// 방만들때 로비 서버에 exit 를 보내서 통신을 끊는다.
+				// writer.println("exit");
+				// writer.flush();
+			}
+			// setVisible(false); // MakeRoom의 프레임을 끄기
+			dispose();
 		} else if (e.getSource() == cancelBtn) {
-			setVisible(false);
+			dispose();
+			// setVisible(false);
 		} else if (pwCheckBox.isSelected() == true) {
 			pwT.setEnabled(true);
 		} else if (pwCheckBox.isSelected() == false) {
@@ -723,6 +761,7 @@ class MakeRoom extends JFrame implements ActionListener {
 			pwT.setText("");
 		}
 	}
+
 	class MyPanel extends JPanel {
 		public void paintComponent(Graphics g) {
 			Toolkit t = Toolkit.getDefaultToolkit();

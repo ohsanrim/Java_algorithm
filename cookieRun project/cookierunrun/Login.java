@@ -108,7 +108,6 @@ public class Login extends JFrame implements ActionListener {
 		p2.setOpaque(false);
 
 		Container con = getContentPane();
-
 		// add
 		backP.setOpaque(false);
 
@@ -131,13 +130,13 @@ public class Login extends JFrame implements ActionListener {
 				clip.open(stream);
 				clip.start();
 				clip.loop(-1);
-			} catch (LineUnavailableException e1) {
-				e1.printStackTrace();
+			} catch (LineUnavailableException e) {
+				e.printStackTrace();
 			}
-		} catch (UnsupportedAudioFileException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
+		} catch (UnsupportedAudioFileException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 		// 이벤트
@@ -145,7 +144,7 @@ public class Login extends JFrame implements ActionListener {
 		registerBtn.addActionListener(this);
 		idSearchBtn.addActionListener(this);
 		pwSearchBtn.addActionListener(this);
-		
+
 		pwF.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -160,7 +159,7 @@ public class Login extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		getPw = new String(pwF.getPassword());
 		if (e.getSource() == loginBtn) {
-			int sw = 0;	
+			int sw = 0;
 			RegisterDAO dao = new RegisterDAO();
 			ArrayList<LoginDTO> ar = dao.selectAll();
 			if (idT.getText().equals("") || getPw.equals("")) {
@@ -220,7 +219,6 @@ public class Login extends JFrame implements ActionListener {
 			}
 		}
 	}
-
 	public static void main(String[] args) {
 		new Login();
 	}
@@ -248,8 +246,7 @@ class Register extends JFrame implements ActionListener {
 	}
 
 	public Register() {
-		super("쿠키런 회원가입");
-
+		super("Cookirun SignUp");
 		list = new JList<LoginDTO>();
 		icon = new ImageIcon("C:\\cookierun\\png\\RegisterBackgroundImg.jpg");
 		JPanel background = new JPanel() {
@@ -268,6 +265,7 @@ class Register extends JFrame implements ActionListener {
 		northP.add(titleL);
 		northP.setBounds(165, 15, 50, 50);
 		northP.setOpaque(false);
+
 /////////////////////////////////////////////////
 		// 라벨 마들기
 		idL = new JLabel("아이디 : ");
@@ -308,7 +306,7 @@ class Register extends JFrame implements ActionListener {
 		lengthNick.setBounds(10, 80, 65, 20);
 		pwL.setBounds(10, 100, 80, 20);
 		lengthPw.setBounds(10, 115, 65, 20);
-		pwconfirmL.setBounds(10, 135, 95, 20);
+		pwconfirmL.setBounds(10, 135, 150, 20);
 		nameL.setBounds(10, 175, 65, 20);
 		birthL.setBounds(10, 205, 65, 20);
 		phoneNL.setBounds(10, 235, 65, 20);
@@ -375,8 +373,8 @@ class Register extends JFrame implements ActionListener {
 		emailconfirmBtn.setBounds(275, 285, 60, 20);
 		idconfirmL.setBounds(110, 35, 170, 20);
 		nickconfirmL.setBounds(110, 70, 170, 20);
-		pwconfirmL.setBounds(110, 140, 170, 20);
-		emailNumCheckL.setBounds(110, 300, 170, 20);
+		pwconfirmL.setBounds(110, 140, 200, 20);
+		emailNumCheckL.setBounds(125, 330, 170, 20);
 
 ////////////////////////////////////////////////////////
 		// 남쪽 패널 설정(버튼 넣기)
@@ -398,7 +396,6 @@ class Register extends JFrame implements ActionListener {
 		cancelBtn.setBounds(110, 0, 100, 28);
 
 		/////////////////////
-
 		background.add(northP);
 		background.add(westP);
 		background.add(centerP);
@@ -421,7 +418,6 @@ class Register extends JFrame implements ActionListener {
 		pwconfirmBtn.addActionListener(this);
 		sendEmailBtn.addActionListener(this);
 		emailconfirmBtn.addActionListener(this);
-
 	}
 
 	// 데이터 입력 메서드
@@ -463,8 +459,6 @@ class Register extends JFrame implements ActionListener {
 		String strPw = new String(pwT.getPassword());
 		String strPwc = new String(pwconfirmT.getPassword());
 		if (e.getSource() == idconfirmBtn) {
-			System.out.print(idT.getText());
-			System.out.println();
 			for (int i = 0; i < ar.size(); i++) {
 				System.out.println(ar.get(i).getId());
 				if (idT.getText().equals(ar.get(i).getId())) {
@@ -479,7 +473,12 @@ class Register extends JFrame implements ActionListener {
 					idconfirmL.setText("사용가능한 아이디입니다.");
 					idconfirmL.setForeground(Color.BLACK);
 				}
-
+			}
+			for (int i = 0; i < idT.getText().length(); i++) {
+				if (idT.getText().charAt(i) == ' ') {
+					idconfirmL.setText("공백을 없애주세요.");
+					idconfirmL.setForeground(Color.RED);
+				}
 			}
 		}
 		// NickName 중복확인
@@ -502,11 +501,19 @@ class Register extends JFrame implements ActionListener {
 					nickconfirmL.setForeground(Color.BLACK);
 				}
 			}
-
+			for (int i = 0; i < nickNameT.getText().length(); i++) {
+				if (nickNameT.getText().charAt(i) == ' ') {
+					nickconfirmL.setText("공백을 없애주세요.");
+					nickconfirmL.setForeground(Color.RED);
+				}
+			}
 			// pw 중복확인
 		} else if (e.getSource() == pwconfirmBtn) {
 			if (strPw.equals("") || strPwc.equals("")) {
 				pwconfirmL.setText("비밀번호를 입력해주세요.");
+				pwconfirmL.setForeground(Color.RED);
+			} else if (strPw.equals(strPwc) && strPw.length() < 6) {
+				pwconfirmL.setText("사용불가능한 비밀번호입니다.");
 				pwconfirmL.setForeground(Color.RED);
 			} else if (strPw.equals(strPwc) && strPw.length() > 5) {
 				pwconfirmL.setText("사용가능한 비밀번호입니다.");
@@ -514,6 +521,20 @@ class Register extends JFrame implements ActionListener {
 			} else if (strPw != strPwc) {
 				pwconfirmL.setText("비밀번호가 일치하지 않습니다.");
 				pwconfirmL.setForeground(Color.RED);
+			}
+			// 패스워드에 공백
+			for (int i = 0; i < strPw.length(); i++) {
+				if (strPw.charAt(i) == ' ') {
+					pwconfirmL.setText("공백을 없애주세요.");
+					pwconfirmL.setForeground(Color.RED);
+				}
+			}
+			// 패스워드확인 공백
+			for (int i = 0; i < strPwc.length(); i++) {
+				if (strPwc.charAt(i) == ' ') {
+					pwconfirmL.setText("공백을 없애주세요.");
+					pwconfirmL.setForeground(Color.RED);
+				}
 			}
 		} else if (e.getSource() == sendEmailBtn) {
 			email = new Email(this);
@@ -525,7 +546,6 @@ class Register extends JFrame implements ActionListener {
 				emailNumCheckL.setText("인증번호가 잘못 되었습니다.");
 				emailNumCheckL.setForeground(Color.RED);
 			}
-
 		} else if (e.getSource() == registerBtn) {
 			if (!idT.getText().equals("") && idT.getText().length() > 5 && !nickNameT.getText().equals("")
 					&& nickNameT.getText().length() > 2 && !strPw.equals("") && strPw.length() > 5 && !strPwc.equals("")
@@ -541,7 +561,6 @@ class Register extends JFrame implements ActionListener {
 			} else {
 				JOptionPane.showMessageDialog(this, "회원정보를 다시 확인하세요.");
 			}
-
 		} else if (e.getSource() == cancelBtn) {
 			dispose();
 		}
@@ -554,8 +573,7 @@ class Register extends JFrame implements ActionListener {
 
 class RegisterDAO {
 	private String driver = "oracle.jdbc.driver.OracleDriver";
-	// private String url = "jdbc:oracle:thin:@192.168.0.20:1521:xe";
-	private String url = "jdbc:oracle:thin:@192.168.0.159:1521:xe";
+	private String url = "jdbc:oracle:thin:@localhost:1521:xe";
 	private String username = "c##java";
 	private String password = "bit";
 	private Connection conn;
@@ -893,15 +911,21 @@ class PwSearch extends JFrame implements ActionListener {
 		}
 	}
 	public void keyEnter() {
-		if(idT.getText().equals("asd") && emailT.getText().equals("asd")) {
-			//new PwChange();
-			setVisible(false);
-		}else if(idT.getText().equals("")) {
-			JOptionPane.showMessageDialog(this, "아이디를 입력해주세요");
-		}else if(emailT.getText().equals("")) {
-			JOptionPane.showMessageDialog(this, "이메일를 입력해주세요");
-		}else if(!idT.getText().equals(dto.getId()) || !emailT.getText().equals(dto.getEmail())) {
-			JOptionPane.showMessageDialog(this, "없는 아이디거나 없는 이메일입니다.");
+		int sw = 0;
+		RegisterDAO dao = new RegisterDAO();
+		ArrayList<LoginDTO> ar = dao.selectAll();
+		for (int i = 0; i < ar.size(); i++) {
+			if (ar.get(i).getId().equals(idT.getText()) && ar.get(i).getEmail().equals(emailT.getText())) {
+				new PwChange(ar.get(i));
+				setVisible(false);
+				sw = 1;
+				break;
+			}
+		}
+		if (sw == 0) {
+			JOptionPane.showMessageDialog(this, "일치하는 정보가 없습니다");
+			idT.setText("");
+			emailT.setText("");
 		}
 	}
 }
@@ -941,7 +965,7 @@ class PwChange extends JFrame implements ActionListener {
 		con.add(checkPwT);
 		con.add(checkBtn);
 		con.add(cancelBtn);
-
+		 
 		setResizable(false);
 		setBounds(750, 250, 350, 150);
 		setVisible(true);
@@ -966,6 +990,8 @@ class PwChange extends JFrame implements ActionListener {
 		if (e.getSource() == checkBtn) {
 			if (getNewPw.equals("") || getCheckPw.equals("")) {
 				JOptionPane.showMessageDialog(this, "항목을 모두 입력해주세요");
+			} else if(!getNewPw.equals(getCheckPw)) {
+				JOptionPane.showMessageDialog(this, "비밀번호가 일치하지않습니다.");
 			} else {
 				loginDTO.setPw(getNewPw);
 				loginDTO.setPwConfirm(getCheckPw);
@@ -980,15 +1006,16 @@ class PwChange extends JFrame implements ActionListener {
 	public void keyEnter() {
 		getNewPw = new String(newPwT.getPassword());
 		getCheckPw = new String(checkPwT.getPassword());
-		if(getNewPw.equals("")) {
-			JOptionPane.showMessageDialog(this, "새 비밀번호를 입력해주세요");
-		}else if (getCheckPw.equals("")) {
-			JOptionPane.showMessageDialog(this, "새 비밀번호 확인을 입력해주세요");
-		}else if(getNewPw.equals(getCheckPw)) {
-			JOptionPane.showMessageDialog(this, "비밀번호가 수정되었습니다.");
+		if (getNewPw.equals("") || getCheckPw.equals("")) {
+			JOptionPane.showMessageDialog(this, "항목을 모두 입력해주세요");
+		} else if(!getNewPw.equals(getCheckPw)) {
+			JOptionPane.showMessageDialog(this, "비밀번호가 일치하지않습니다.");
+		} else {
+			loginDTO.setPw(getNewPw);
+			loginDTO.setPwConfirm(getCheckPw);
+			new RegisterDAO().updatePw(loginDTO);
+			JOptionPane.showMessageDialog(this, "비밀번호가 수정되었습니다");
 			setVisible(false);
-		}else if(!getNewPw.equals(getCheckPw)) {
-			JOptionPane.showMessageDialog(this, "입력하신 비밀번호가 일치하지 않습니다.");
 		}
 	}
 }

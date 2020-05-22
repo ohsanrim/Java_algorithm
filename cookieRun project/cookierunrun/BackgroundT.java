@@ -22,7 +22,6 @@ class BackgroundT extends JPanel implements Runnable {
     // 1라운드 배경 이미지
     public Image backgroundImg_Round1;
     public Image backgroundImg2_Round1;
-
     // 2라운드 배경 이미지
     public Image background1;
     // 배경 음악 재생
@@ -76,7 +75,7 @@ class BackgroundT extends JPanel implements Runnable {
     @Override
     public void run() {
         play("C:\\cookierun\\music\\gameMusic.wav");
-        while (!GameClient.gameDie) {
+        while (!Game1Client.gameDie) {
             // 시간을 측정해서 25초 이후엔 자동으로 2라운드 진입
             endTime = System.currentTimeMillis();
             gamingTime = (int) (endTime - startTime) / 1000;
@@ -94,7 +93,7 @@ class BackgroundT extends JPanel implements Runnable {
                 Thread.sleep(3);
             } catch (InterruptedException e) {
             }
-            if (GameClient.gameDie)
+            if (Game1Client.gameDie)
                 break;
         }
         clip.stop();

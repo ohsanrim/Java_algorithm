@@ -68,7 +68,7 @@ public class RunningCookie extends JPanel implements Runnable{
 	@Override
 	public void run() {
 		
-		while(!GameClient.gameDie) {
+		while(!Game1Client.gameDie) {
 				if(coll==true) {  //장애물과 충돌했을 떄
 					choice=7;
 			 	}else if(slide==false&&jump==false&coll==false){  //그냥 달릴 때
@@ -112,7 +112,7 @@ public class RunningCookie extends JPanel implements Runnable{
 				} 	
 			}
 			repaint();
-			if(GameClient.gameDie==true) break;
+			if(Game1Client.gameDie==true) break;
 		}
 	}
 	public void setSlide(boolean slide) {

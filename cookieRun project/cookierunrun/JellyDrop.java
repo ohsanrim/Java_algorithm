@@ -16,7 +16,7 @@ class JellyDrop implements Runnable {
     }
 
     public void run() {
-        while (!GameClient.gameDie) {
+        while (!Game1Client.gameDie) {
             // 새로운 젤리 셋팅
             if (Jelly.list.size() == 16)
                 Jelly.list.remove(0);
@@ -29,7 +29,7 @@ class JellyDrop implements Runnable {
                 Thread.sleep(200); // 초단위로 진행됨
             } catch (InterruptedException e) {
             }
-            if (GameClient.gameDie)
+            if (Game1Client.gameDie)
                 break;
         }
     }

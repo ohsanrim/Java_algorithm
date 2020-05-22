@@ -168,7 +168,7 @@ public class MovingHurdle extends JPanel implements Runnable {
     }
     @Override
     public void run() {
-        while (!GameClient.gameDie) {
+        while (!Game1Client.gameDie) {
             // 허들이 정해진 시간마다 출몰함
             endTime = System.currentTimeMillis();
             gamingTime = (int) (endTime - startTime) / 1000;
@@ -186,44 +186,12 @@ public class MovingHurdle extends JPanel implements Runnable {
                 Thread.sleep(2);
             } catch (InterruptedException e) {
             }
-            if (GameClient.gameDie)
+            if (Game1Client.gameDie)
                 break;
         }
     }
 
     public ArrayList<HurdleDTO> getHurdleList() {
         return movingHurdle;
-    }
-}
-
-class HurdleDTO {
-    public int x, y;
-    public int imageIndex;
-
-    public HurdleDTO() {
-    }
-
-    public HurdleDTO(int imageIndex) {
-        this.imageIndex = imageIndex;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public int getImageIndex() {
-        return imageIndex;
     }
 }

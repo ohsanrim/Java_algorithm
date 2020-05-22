@@ -56,6 +56,7 @@ public class Email {
          // 메일 내용을 추가해준다
          message.setText("어서오세요!!\n인증 번호: " + code);
          // 메일 전송
+         System.out.println("인증번호" + code);
          Transport.send(message);
       } catch (AddressException e) {
          // TODO Auto-generated catch block

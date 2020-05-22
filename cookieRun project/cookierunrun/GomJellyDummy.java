@@ -137,7 +137,7 @@ class GomJellyDummy extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        while (!GameClient.gameDie) {
+        while (!Game1Client.gameDie) {
             endTime = System.currentTimeMillis();
             gamingTime = (int) (endTime - startTime) / 1000;
 
@@ -151,7 +151,7 @@ class GomJellyDummy extends JPanel implements Runnable {
                 Thread.sleep(3);
             } catch (InterruptedException e) {
             }
-            if (GameClient.gameDie == true) break;  //확인사살로 한개 더 만들어 둠
+            if (Game1Client.gameDie == true) break;  //확인사살로 한개 더 만들어 둠
         }
     }
     //음악을 재생해주는 메소드
@@ -164,31 +164,5 @@ class GomJellyDummy extends JPanel implements Runnable {
             clip.start();
         } catch (Exception e) {
         }
-    }
-}
-// 곰젤리 한개의 좌표값을 가지고 있는 곰젤리 DTO클래스
-class GomJellyDTO {
-    public int x;
-    public int y;
-    public boolean eat = false; // 젤리를 먹었을 떄 true로 바뀐다.
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public void setEat(boolean eat) {
-        this.eat = eat;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
     }
 }

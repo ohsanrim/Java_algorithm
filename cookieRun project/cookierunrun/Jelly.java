@@ -84,7 +84,7 @@ public class Jelly extends JPanel implements Runnable {
     }
     
     public void run() {
-        while (!GameClient.gameDie) {
+        while (!Game1Client.gameDie) {
             try {
                 if (list.size() > 0) {
                     for (JellyDTO data : list) {
@@ -98,31 +98,9 @@ public class Jelly extends JPanel implements Runnable {
                 Thread.sleep(3); // 초단위로 진행됨
             } catch (InterruptedException e) {
             }
-            if (GameClient.gameDie)
+            if (Game1Client.gameDie)
                 break;
         }
 
-    }
-}
-//작은 젤리 한개의 좌표값을 담고있는 DTO클래스. 
-class JellyDTO { // 각각의 젤리에 대한 좌표값을 저장
-    public int x, y;
-    public boolean eat = false;  //만약 쿠키와 닿으면  true가 되어서 패널위에서 보이지 않는다. 
-    public int imageIndex;
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
     }
 }

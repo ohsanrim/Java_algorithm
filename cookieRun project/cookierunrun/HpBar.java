@@ -98,7 +98,7 @@ public class HpBar extends JPanel implements Runnable {
 		
 		//죽었을 때(체력이 0보다 작을 때)
 		if (MovingHurdle.health < 0) {
-			GameClient.gameDie = true;
+			Game1Client.gameDie = true;
 		}
 		// 상단 위에 곰젤리&코인을 카운팅하는 위젯 넣기
 		g.drawImage(gomCountBackground, 570, 30, 35, 30, this);
@@ -110,7 +110,7 @@ public class HpBar extends JPanel implements Runnable {
 		g.drawImage(scoreBackground, 300, 75, 20, 20, this);
 		score.setText(df.format(Jelly.gameScore));
 	
-		competitionL.setText(GameClient.competitionScore);
+		competitionL.setText(Game1Client.competitionScore);
 	}
 	//스레드를 시작해주는 메소드
 	public void threadStart() {
@@ -120,7 +120,7 @@ public class HpBar extends JPanel implements Runnable {
 
 	@Override
 	public void run() {
-		while (!GameClient.gameDie) {
+		while (!Game1Client.gameDie) {
 			MovingHurdle.health -= 4; // 2초에 1퍼센트 씩 체력 소모
 			try {
 				Thread.sleep(2000); // 1초에 1씩 닳게 하고 싶으면 1000으로 교환해주기
@@ -128,7 +128,7 @@ public class HpBar extends JPanel implements Runnable {
 				return;
 			}
 			repaint();
-			if (GameClient.gameDie) break;
+			if (Game1Client.gameDie) break;
 		}
 	}
 }
