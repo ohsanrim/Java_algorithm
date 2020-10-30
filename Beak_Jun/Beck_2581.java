@@ -1,8 +1,8 @@
-package git_practice;
+package Beak_Jun;
 
 import java.util.Scanner;
 
-public class Beck_2581 {   //¼Ò¼ö
+public class Beck_2581 {   //ï¿½Ò¼ï¿½
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);

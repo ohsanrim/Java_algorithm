@@ -1,12 +1,9 @@
-package Beakjoon_practice;
-
+package Beak_Jun;
 import java.util.Scanner;
-
-public class Main {
-
+public class factorial {
 	public static void main(String[] args) {
-		Scanner s = new Scanner(System.in);
-		int N = s.nextInt();
+		Scanner sc = new Scanner(System.in);
+		int N = sc.nextInt();
 		System.out.println(Function(N));
 	}
 	public static int Function(int num) {
@@ -18,4 +15,5 @@ public class Main {
 			return num*Function(num-1);
 		}
 	}
+
 }

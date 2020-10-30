@@ -1,4 +1,4 @@
-package boardProject;
+package Beak_Jun;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

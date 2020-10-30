@@ -1,4 +1,4 @@
-package git_practice;
+package Beak_Jun;
 
 import java.util.Scanner;
 
@@ -16,7 +16,7 @@ public class beak_1978 {
 		}
 		System.out.println(count);	
 	}
-	public static Boolean decimal(int n) {  //¼Ò¼ö È®ÀÎÇÔ¼ö
+	public static Boolean decimal(int n) {  //ï¿½Ò¼ï¿½ È®ï¿½ï¿½ï¿½Ô¼ï¿½
 		boolean a = true;
 		if(n==1) {
 			a=false;

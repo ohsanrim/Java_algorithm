@@ -1,4 +1,4 @@
-package git_practice;
+package Beak_Jun;
 
 import java.util.Scanner;
 

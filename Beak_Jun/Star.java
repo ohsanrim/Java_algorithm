@@ -1,8 +1,8 @@
-package git_practice;  
+package Beak_Jun;  
 
 import java.util.Scanner;
 
-public class Star {  //Àç±ÍÇÔ¼ö¸¦ ÅëÇÑ N*NÇüÅÂ·Î º° Ãâ·ÂÇÏ±â
+public class Star {  //ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ N*Nï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï±ï¿½
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);

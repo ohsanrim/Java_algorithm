@@ -1,4 +1,4 @@
-package studyfile;
+package Beak_Jun;
 
 import java.util.Scanner;
 
@@ -6,15 +6,15 @@ public class QuizEx3 {
 
 	public static void main(String[] args) {
 		 String[] data = { 
-                 "´ÙÀ½ Áß Å°¿öµå°¡ ¾Æ´Ñ °ÍÀº?`2`final`True`if`public", 
-                 "´ÙÀ½ Áß ÀÚ¹ÙÀÇ ¿¬»êÀÚ°¡ ¾Æ´Ñ °ÍÀº?`6`&`|`++`!=`/`^", 
-                 "´ÙÀ½ Áß ¸Þ¼­µåÀÇ ¹ÝÈ¯°ªÀÌ ¾øÀ½À» ÀÇ¹ÌÇÏ´Â Å°¿öµå´Â?`1`void`null`false`", 
+                 "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Å°ï¿½ï¿½ï¿½å°¡ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½ï¿½?`2`final`True`if`public", 
+                 "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ú¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½ï¿½?`6`&`|`++`!=`/`^", 
+                 "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¹ï¿½ï¿½Ï´ï¿½ Å°ï¿½ï¿½ï¿½ï¿½ï¿½?`1`void`null`false`", 
            }; 
            
            Scanner s = new Scanner(System.in); 
            int score = 0; 
 
-           shuffle(data); // ¹®Á¦¸¦ ¼¯´Â´Ù.
+           shuffle(data); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â´ï¿½.
 
            for(int i=0;i < data.length;i++) { 
                  String[] tmp = data[i].split("`",3); 
@@ -25,7 +25,7 @@ public class QuizEx3 {
 
                  answer = choices[Integer.parseInt(answer)-1]; 
 
-                 shuffle(choices); // ¼±ÅÃÁö¸¦ ¼¯´Â´Ù.
+                 shuffle(choices); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â´ï¿½.
 
                  System.out.println("["+(i+1)+"] "+question); 
 
@@ -35,7 +35,7 @@ public class QuizEx3 {
                  } 
 
                  System.out.println(); 
-                 System.out.print("[´ä]"); 
+                 System.out.print("[ï¿½ï¿½]"); 
                  String input = s.nextLine(); 
                  
                  if(input.equals(answer)) { 
@@ -46,16 +46,16 @@ public class QuizEx3 {
                  System.out.println(); 
            } 
 
-           System.out.println("Á¤´ä°³¼ö/ÀüÃ¼¹®Ç×¼ö :"+score+"/"+data.length); 
+           System.out.println("ï¿½ï¿½ï¿½ä°³ï¿½ï¿½/ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½×¼ï¿½ :"+score+"/"+data.length); 
      } // main 
 
      public static void shuffle(String[] data) { 
 
-          // ÄÚµå¸¦ ¿Ï¼ºÇÏ¼¼¿ä.
+          // ï¿½Úµå¸¦ ï¿½Ï¼ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.
 
-          //  1. ¹è¿­dataÀÇ °³¼ö°¡ 0º¸´Ù °°°Å³ª ÀûÀ¸¸é ¸Þ¼­µå ÀüÃ¼¸¦ ºüÁ®³ª°£´Ù.
+          //  1. ï¿½è¿­dataï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
 
-          //  2. ¼±ÅÃÁöÀÇ ¼ø¼­¸¦ µÚ¹Ù²Û´Ù. ¹Ýº¹¹®°ú Math.random()»ç¿ë
+          //  2. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¹Ù²Û´ï¿½. ï¿½Ýºï¿½ï¿½ï¿½ï¿½ï¿½ Math.random()ï¿½ï¿½ï¿½
      } // shuffle() 
 
 

@@ -1,8 +1,8 @@
-package git_practice;
+package Beak_Jun;
 
 import java.util.Scanner;
 
-public class Beak_9020 {    //°ñµå¹ÙÈåÀÇ ÃßÃø
+public class Beak_9020 {    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 	public static void main(String[] args) {  
 		Scanner sc = new Scanner(System.in);
@@ -20,7 +20,7 @@ public class Beak_9020 {    //°ñµå¹ÙÈåÀÇ ÃßÃø
 					}
 				}
 			}
-			//´õÇÑ µÎ °³ÀÇ ¼Ò¼ö °ª ±¸ÇÏ±â
+			//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò¼ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ï±ï¿½
 			int x=0;
 			for(int i=1;i<=n/2;i++) { 
 				if(A[i]==false) {

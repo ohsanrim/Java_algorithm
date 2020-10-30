@@ -1,4 +1,4 @@
-package studyfile;
+package Beak_Jun;
 
 import java.util.Scanner;
 
@@ -6,9 +6,9 @@ public class QuizEx2 {
 
 	public static void main(String[] args) { 
         String[] data = { 
-              "´ÙÀ½ Áß Å°¿öµå°¡ ¾Æ´Ñ °ÍÀº?`2`final`True`if`public", 
-              "´ÙÀ½ Áß ÀÚ¹ÙÀÇ ¿¬»êÀÚ°¡ ¾Æ´Ñ °ÍÀº?`6`&`|`++`!=`/`^", 
-              "´ÙÀ½ Áß ¸Þ¼­µåÀÇ ¹ÝÈ¯°ªÀÌ ¾øÀ½À» ÀÇ¹ÌÇÏ´Â Å°¿öµå´Â?`1`void`null`false`", 
+              "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Å°ï¿½ï¿½ï¿½å°¡ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½ï¿½?`2`final`True`if`public", 
+              "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ú¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½ï¿½?`6`&`|`++`!=`/`^", 
+              "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¹ï¿½ï¿½Ï´ï¿½ Å°ï¿½ï¿½ï¿½ï¿½ï¿½?`1`void`null`false`", 
         }; 
         
         Scanner s = new Scanner(System.in); 
@@ -27,7 +27,7 @@ public class QuizEx2 {
                     System.out.print((x+1)+"."+choices[x]+"\t"); 
               } 
               System.out.println(); 
-              System.out.println("[´ä]");
+              System.out.println("[ï¿½ï¿½]");
               String input =s.nextLine();
               
               if(input.equals(answer)) {
@@ -39,7 +39,7 @@ public class QuizEx2 {
         } 
         
 
-        System.out.println("Á¤´ä°³¼ö/ÀüÃ¼¹®Ç×¼ö:"+count+"/"+data.length);
+        System.out.println("ï¿½ï¿½ï¿½ä°³ï¿½ï¿½/ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½×¼ï¿½:"+count+"/"+data.length);
 
 
   } // main 
