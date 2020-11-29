@@ -14,7 +14,7 @@ public class Programmers_42626 {
 		}
 		int count=0;
 		while(true) {
-			if(pq.size()==1) {
+			if(pq.peek()>=K&&pq.size()==1) {
 				count=-1;
 				break;
 			}
