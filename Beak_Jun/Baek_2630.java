@@ -48,5 +48,4 @@ public class Baek_2630 {
 		}
 		return true;
 	}
-
 }
