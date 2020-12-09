@@ -31,5 +31,4 @@ public class Baek_11866 {
 		answer+=">";
 		System.out.println(answer);
 	}
-
 }
