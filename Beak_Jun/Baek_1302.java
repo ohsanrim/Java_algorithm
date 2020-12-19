@@ -37,5 +37,4 @@ public class Baek_1302 {
 		});
 		System.out.println(map.get(0)[0]);
 	}
-
 }
