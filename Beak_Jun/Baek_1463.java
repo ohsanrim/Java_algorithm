@@ -13,7 +13,7 @@ public class Baek_1463 {
 		for(int i=0;i<=N;i++) {
 			check[i]=-1;
 		}
-		check[1]=1;
+		check[1]=0;
 		if(N>=2) check[2]=1;
 		if(N>=3) check[3]=1;
 		dp(N);
