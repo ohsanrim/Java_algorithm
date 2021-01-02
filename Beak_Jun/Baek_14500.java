@@ -38,7 +38,7 @@ public class Baek_14500 {
 	private static void dfs(int level,int cal,int pointX, int pointY ) {
 		// TODO Auto-generated method stub
 		if(level==0) {
-			//성모양 계산
+			//성 모양 계산
 			for(int i=0;i<4;i++) {
 				int cal1=cal;
 				boolean check= true;
@@ -55,40 +55,25 @@ public class Baek_14500 {
 					}
 				}
 				if(check) {
-					//System.out.println("========성모샹 계산 끝:"+cal1);
 					max=Math.max(max, cal1);
 				}
 			}
 		}
 		if(level==3) {
-			//종료
+			//종료 조건
 			max=Math.max(max, cal);
-			//System.out.println(cal+"현재 최대값");
-			//print();
 			return;
 		}
 		for(int i=0;i<4;i++) {
 			int x= pointX+move[i][0];
 			int y = pointY+move[i][1];
 			if(isIn(x,y)&& !visited[x][y]) {
-				//System.out.print(x+" "+y+"/");
 				visited[x][y]=true;
 				dfs(level+1, cal+map[x][y],x,y);
 				visited[x][y]=false;
 			}
 		}
 	}
-/*
-	private static void print() {
-		// TODO Auto-generated method stub
-		for(int i=0;i<n;i++) {
-			for(int j=0;j<m;j++) {
-				System.out.print(visited[i][j]);
-			}
-			System.out.println();
-		}
-	}
-*/
 	private static boolean isIn(int x, int y) {
 		return x>=0 && y>=0 && x<n && y<m;
 	}
