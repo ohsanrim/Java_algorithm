@@ -7,6 +7,7 @@ public class Baek_9663 {
 	public static int N;
 	public static int col[];
 	public static int answer;
+	static int cnt=0;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Scanner sc = new Scanner(System.in);
@@ -15,14 +16,13 @@ public class Baek_9663 {
 		col = new int[N];
 		answer=0;
 		dfs(0);
+		System.out.println(cnt);
 	}
 	public static void dfs(int level) {
 		if(level==N) {
 			//끝났을 경우
-			for(int data : col) {
-				System.out.print(data);
-			}
-			System.out.println();
+			cnt++;
+			return;
 		} else {
 			//아직 계산중일 때
 			for(int i=0;i<N;i++) {
@@ -45,8 +45,6 @@ public class Baek_9663 {
 				return false;
 			}
 		}
-		
-		
 		return true;
 	}
 }
