@@ -40,7 +40,7 @@ public class Baek_11286 {
 				if(input<0) nagative.add(input);
 				else positive.add(input);
 			}
-			HttpURLConnection conn = 
+			//HttpURLConnection conn = 
 		}
 
 	}

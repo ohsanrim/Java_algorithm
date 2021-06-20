@@ -1,4 +1,4 @@
-package Beak_Jun;
+package CodeUp;
 
 import java.util.Scanner;
 

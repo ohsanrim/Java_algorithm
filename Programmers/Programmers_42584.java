@@ -1,4 +1,4 @@
-package Beak_Jun;
+package Programmers;
 
 public class Programmers_42584 {
 	public static void main(String[] args) {
@@ -13,9 +13,9 @@ class Solution {
 	    public int[] solution(int[] prices) {
 	        int[] answer = new int[prices.length];
 	        int countSecond = 0;
-	        //ÀüÃ¼ È½¼ö
+	        //ï¿½ï¿½Ã¼ È½ï¿½ï¿½
 	        for(int i=0;i<prices.length;i++) {
-	            //°¢ ¹øÈ£ º°·Î 
+	            //ï¿½ï¿½ ï¿½ï¿½È£ ï¿½ï¿½ï¿½ï¿½ 
 	            for(int j=i;j<prices.length;j++) {
 	                 countSecond++;
 	                if(prices[i]>prices[j]) {

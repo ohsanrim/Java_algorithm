@@ -1,4 +1,4 @@
-package Beak_Jun;
+package Programmers;
 
 public class Programmers_42587 {
 
@@ -8,9 +8,7 @@ public class Programmers_42587 {
 		int location=0;
 		int answer = s.solution(priorities, location);
 	}
-	
-}
-	class Solution {
+	public static class Solution {
 	    public int solution(int[] priorities, int location) {
 	        int answer = 0;
 	        int count=0; //출력횟수
@@ -45,4 +43,6 @@ public class Programmers_42587 {
 	        return answer;
 	    }
 	}
+}
+	
 

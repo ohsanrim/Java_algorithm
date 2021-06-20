@@ -1,4 +1,4 @@
-package Beak_Jun;
+package CodeUp;
 
 public class CodeUp_1858 {
 
